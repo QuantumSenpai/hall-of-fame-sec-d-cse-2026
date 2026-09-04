@@ -47,7 +47,7 @@ export const PolaroidStack: React.FC<PolaroidStackProps> = ({ photos }) => {
                 {photo.title}
               </h4>
               {photo.caption && (
-                <p className="font-handwritten text-base text-[#44636A] text-center mt-1">
+                <p className="font-handwritten text-lg text-[#8b4520] text-center mt-1">
                   "{photo.caption}"
                 </p>
               )}
@@ -60,14 +60,14 @@ export const PolaroidStack: React.FC<PolaroidStackProps> = ({ photos }) => {
       <AnimatePresence>
         {selectedPhoto && (
           <motion.div
-            className="fixed inset-0 z-50 bg-charcoal/90 backdrop-blur-md flex items-center justify-center p-4"
+            className="fixed inset-0 z-50 bg-[#070204]/90 backdrop-blur-md flex items-center justify-center p-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedPhoto(null)}
           >
             <motion.div
-              className="relative max-w-3xl w-full bg-[#EFE6CA] text-[#292D2B] p-6 rounded-lg shadow-2xl border-2 border-[#B9905A]"
+              className="relative max-w-3xl w-full bg-[#16060b] text-[#f2e8d5] p-6 rounded-2xl shadow-[0_25px_80px_rgba(0,0,0,0.9),0_0_40px_rgba(201,164,99,0.12)] border border-[rgba(201,164,99,0.35)]"
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
@@ -75,21 +75,21 @@ export const PolaroidStack: React.FC<PolaroidStackProps> = ({ photos }) => {
             >
               <button
                 onClick={() => setSelectedPhoto(null)}
-                className="absolute top-4 right-4 p-2 bg-[#292D2B] text-[#EFE6CA] rounded-full hover:bg-[#B9905A] transition-colors"
+                className="absolute top-4 right-4 p-2 bg-[#220912] border border-[#c9a463] text-[#c9a463] rounded-full hover:bg-[#c9a463] hover:text-[#0e0407] transition-colors shadow"
               >
                 <X className="w-5 h-5" />
               </button>
               <img
                 src={selectedPhoto.imageUrl}
                 alt={selectedPhoto.title}
-                className="w-full max-h-[70vh] object-contain rounded mb-4 shadow"
+                className="w-full max-h-[70vh] object-contain rounded-lg mb-4 shadow-lg border border-[rgba(201,164,99,0.2)]"
               />
-              <h3 className="font-serif text-2xl font-bold text-[#292D2B]">
+              <h3 className="font-serif text-2xl font-bold text-[#f2e8d5]">
                 {selectedPhoto.title}
               </h3>
               {selectedPhoto.caption && (
-                <p className="font-sans text-sm text-[#44636A] mt-2">
-                  {selectedPhoto.caption}
+                <p className="font-handwritten text-lg text-[#e2c27e] mt-2">
+                  "{selectedPhoto.caption}"
                 </p>
               )}
             </motion.div>

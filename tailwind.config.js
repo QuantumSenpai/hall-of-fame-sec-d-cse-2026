@@ -4,62 +4,79 @@ export default {
   theme: {
     extend: {
       colors: {
-        paper: {
-          light: '#F8F4EA',
-          DEFAULT: '#EFE6CA', // Warm Ivory
-          dark: '#E2D5B5',
-          aged: '#D5C4A1',
+        cinematic: {
+          950: '#070404',
+          900: '#0D0608',
+          800: '#120709',
+          700: '#1A0C0C',
+          600: '#250D0D',
+          500: '#3D1515',
         },
         gold: {
-          light: '#D4AF77',
-          DEFAULT: '#B9905A', // Antique Gold
-          dark: '#936E3B',
+          light: '#E2C27E',
+          DEFAULT: '#C9A463',
+          dark: '#A0793A',
+          dim: '#8B6535',
         },
-        terracotta: {
-          light: '#D07E66',
-          DEFAULT: '#B95F46', // Terracotta
-          dark: '#93442F',
+        ivory: {
+          light: '#F8F0E3',
+          DEFAULT: '#F2E8D5',
+          muted: '#C4B49A',
+          dim: '#8B7355',
         },
-        mutedblue: {
-          light: '#5D8088',
-          DEFAULT: '#44636A', // Muted Blue
-          dark: '#2E4950',
+        wine: {
+          light: '#4A1818',
+          DEFAULT: '#3D1515',
+          dark: '#250D0D',
         },
-        charcoal: {
-          light: '#3D423F',
-          DEFAULT: '#292D2B', // Charcoal
-          dark: '#1A1D1B',
-          deep: '#121413',
-        },
+        paper: '#EDE0C8',
+        parchment: '#F5ECD8',
       },
       fontFamily: {
-        serif: ['"Cormorant Garamond"', '"Bodoni Moda"', '"Playfair Display"', 'Georgia', 'serif'],
-        sans: ['"Inter"', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-        handwritten: ['"Caveat"', '"Dancing Script"', 'cursive'],
-      },
-      boxShadow: {
-        'book': '0 20px 50px -10px rgba(0, 0, 0, 0.5), 0 0 30px rgba(185, 144, 90, 0.15)',
-        'polaroid': '0 10px 30px -5px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 0, 0, 0.15)',
-        'vintage': '0 4px 20px rgba(0, 0, 0, 0.25), inset 0 0 15px rgba(0, 0, 0, 0.05)',
+        serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+        sans: ['"Inter"', 'system-ui', 'sans-serif'],
+        handwritten: ['"Caveat"', 'cursive'],
+        display: ['"Playfair Display"', '"Cormorant Garamond"', 'serif'],
       },
       animation: {
         'float': 'float 6s ease-in-out infinite',
-        'pulse-subtle': 'pulseSubtle 3s ease-in-out infinite',
-        'glow': 'glow 2s ease-in-out infinite alternate',
+        'float-slow': 'float 9s ease-in-out infinite',
+        'float-delayed': 'float 7s ease-in-out 2s infinite',
+        'petal-fall': 'petalFall 8s ease-in infinite',
+        'pulse-gold': 'pulseGold 3s ease-in-out infinite',
+        'shimmer': 'shimmer 2.5s linear infinite',
+        'glow-pulse': 'glowPulse 2s ease-in-out infinite alternate',
+        'scroll-dot': 'scrollDot 1.5s ease-in-out infinite',
       },
       keyframes: {
         float: {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-10px)' },
+          '0%, 100%': { transform: 'translateY(0px) rotate(-1deg)' },
+          '50%': { transform: 'translateY(-18px) rotate(0.5deg)' },
         },
-        pulseSubtle: {
-          '0%, 100%': { opacity: 1 },
-          '50%': { opacity: 0.7 },
+        petalFall: {
+          '0%': { transform: 'translateY(-10px) rotate(0deg)', opacity: '0.9' },
+          '100%': { transform: 'translateY(110vh) rotate(360deg)', opacity: '0' },
         },
-        glow: {
-          '0%': { boxShadow: '0 0 10px rgba(185, 144, 90, 0.3)' },
-          '100%': { boxShadow: '0 0 35px rgba(185, 144, 90, 0.8), 0 0 60px rgba(185, 95, 70, 0.4)' },
+        pulseGold: {
+          '0%, 100%': { textShadow: '0 0 20px rgba(201, 164, 99, 0.3)' },
+          '50%': { textShadow: '0 0 40px rgba(201, 164, 99, 0.8)' },
         },
+        shimmer: {
+          '0%': { backgroundPosition: '-200% center' },
+          '100%': { backgroundPosition: '200% center' },
+        },
+        glowPulse: {
+          '0%': { boxShadow: '0 0 15px rgba(201, 164, 99, 0.3), 0 0 30px rgba(201, 164, 99, 0.1)' },
+          '100%': { boxShadow: '0 0 30px rgba(201, 164, 99, 0.6), 0 0 60px rgba(201, 164, 99, 0.3)' },
+        },
+        scrollDot: {
+          '0%': { transform: 'translateY(0)', opacity: '1' },
+          '100%': { transform: 'translateY(10px)', opacity: '0' },
+        },
+      },
+      backgroundImage: {
+        'vignette': 'radial-gradient(ellipse at center, transparent 40%, rgba(7,4,4,0.8) 100%)',
+        'gold-shimmer': 'linear-gradient(90deg, transparent 0%, rgba(201,164,99,0.4) 50%, transparent 100%)',
       },
     },
   },

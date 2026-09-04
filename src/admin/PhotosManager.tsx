@@ -45,15 +45,15 @@ export const PhotosManager: React.FC<PhotosManagerProps> = ({ photos, chapters, 
   return (
     <div className="space-y-8">
       {/* Add Photo Form */}
-      <form onSubmit={handleAdd} className="bg-[#1A1D1B] border border-[#B9905A]/40 p-6 rounded-lg space-y-4">
-        <h3 className="font-serif text-lg font-bold text-[#EFE6CA] flex items-center space-x-2">
-          <Plus className="w-5 h-5 text-[#B9905A]" />
+      <form onSubmit={handleAdd} className="bg-[#16060b] border border-[rgba(201,164,99,0.25)] p-6 rounded-xl space-y-4 shadow-xl">
+        <h3 className="font-serif text-lg font-bold text-[#f2e8d5] flex items-center space-x-2 border-b border-[rgba(201,164,99,0.2)] pb-3">
+          <Plus className="w-5 h-5 text-[#c9a463]" />
           <span>Add New Photo (Google Drive / Direct URL Supported)</span>
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs uppercase tracking-wider text-[#B9905A] mb-1 font-semibold">
+            <label className="block text-xs uppercase tracking-wider text-[#c9a463] mb-1 font-semibold">
               Photo Title
             </label>
             <input
@@ -62,18 +62,18 @@ export const PhotosManager: React.FC<PhotosManagerProps> = ({ photos, chapters, 
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Cake Cutting Moment"
-              className="w-full px-3 py-2 bg-[#292D2B] border border-[#B9905A]/40 rounded text-sm text-[#EFE6CA] focus:outline-none focus:border-[#B9905A]"
+              className="w-full px-3.5 py-2.5 bg-[#220a12] border border-[rgba(201,164,99,0.3)] rounded-lg text-sm text-[#f2e8d5] placeholder:text-[rgba(242,232,213,0.3)] focus:outline-none focus:border-[#c9a463] transition-colors"
             />
           </div>
 
           <div>
-            <label className="block text-xs uppercase tracking-wider text-[#B9905A] mb-1 font-semibold">
+            <label className="block text-xs uppercase tracking-wider text-[#c9a463] mb-1 font-semibold">
               Chapter Location
             </label>
             <select
               value={chapterId}
               onChange={(e) => setChapterId(Number(e.target.value))}
-              className="w-full px-3 py-2 bg-[#292D2B] border border-[#B9905A]/40 rounded text-sm text-[#EFE6CA] focus:outline-none focus:border-[#B9905A]"
+              className="w-full px-3.5 py-2.5 bg-[#220a12] border border-[rgba(201,164,99,0.3)] rounded-lg text-sm text-[#f2e8d5] focus:outline-none focus:border-[#c9a463] transition-colors"
             >
               {chapters.map((ch) => (
                 <option key={ch.id} value={ch.id}>
@@ -84,7 +84,7 @@ export const PhotosManager: React.FC<PhotosManagerProps> = ({ photos, chapters, 
           </div>
 
           <div className="sm:col-span-2">
-            <label className="block text-xs uppercase tracking-wider text-[#B9905A] mb-1 font-semibold">
+            <label className="block text-xs uppercase tracking-wider text-[#c9a463] mb-1 font-semibold">
               Image URL / Google Drive Share Link *
             </label>
             <div className="relative">
@@ -94,17 +94,17 @@ export const PhotosManager: React.FC<PhotosManagerProps> = ({ photos, chapters, 
                 value={imageUrl}
                 onChange={(e) => setImageUrl(e.target.value)}
                 placeholder="https://drive.google.com/file/d/... OR https://images.unsplash.com/..."
-                className="w-full pl-9 pr-3 py-2 bg-[#292D2B] border border-[#B9905A]/40 rounded text-sm text-[#EFE6CA] focus:outline-none focus:border-[#B9905A]"
+                className="w-full pl-10 pr-3.5 py-2.5 bg-[#220a12] border border-[rgba(201,164,99,0.3)] rounded-lg text-sm text-[#f2e8d5] placeholder:text-[rgba(242,232,213,0.3)] focus:outline-none focus:border-[#c9a463] transition-colors"
               />
-              <HardDrive className="w-4 h-4 text-[#B9905A] absolute left-3 top-2.5" />
+              <HardDrive className="w-4 h-4 text-[#c9a463] absolute left-3.5 top-3" />
             </div>
-            <p className="text-[11px] text-[#44636A] mt-1">
+            <p className="text-[11px] text-[rgba(201,164,99,0.7)] mt-1">
               Google Drive links are automatically converted to direct stream URLs.
             </p>
           </div>
 
           <div>
-            <label className="block text-xs uppercase tracking-wider text-[#B9905A] mb-1 font-semibold">
+            <label className="block text-xs uppercase tracking-wider text-[#c9a463] mb-1 font-semibold">
               Caption
             </label>
             <input
@@ -112,18 +112,18 @@ export const PhotosManager: React.FC<PhotosManagerProps> = ({ photos, chapters, 
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
               placeholder="e.g. Captured at 11 AM"
-              className="w-full px-3 py-2 bg-[#292D2B] border border-[#B9905A]/40 rounded text-sm text-[#EFE6CA] focus:outline-none focus:border-[#B9905A]"
+              className="w-full px-3.5 py-2.5 bg-[#220a12] border border-[rgba(201,164,99,0.3)] rounded-lg text-sm text-[#f2e8d5] placeholder:text-[rgba(242,232,213,0.3)] focus:outline-none focus:border-[#c9a463] transition-colors"
             />
           </div>
 
           <div>
-            <label className="block text-xs uppercase tracking-wider text-[#B9905A] mb-1 font-semibold">
+            <label className="block text-xs uppercase tracking-wider text-[#c9a463] mb-1 font-semibold">
               Presentation Frame Style
             </label>
             <select
               value={layoutStyle}
               onChange={(e) => setLayoutStyle(e.target.value as any)}
-              className="w-full px-3 py-2 bg-[#292D2B] border border-[#B9905A]/40 rounded text-sm text-[#EFE6CA] focus:outline-none focus:border-[#B9905A]"
+              className="w-full px-3.5 py-2.5 bg-[#220a12] border border-[rgba(201,164,99,0.3)] rounded-lg text-sm text-[#f2e8d5] focus:outline-none focus:border-[#c9a463] transition-colors"
             >
               <option value="polaroid">Polaroid Frame</option>
               <option value="torn_edge">Torn Paper Edge</option>
@@ -136,7 +136,7 @@ export const PhotosManager: React.FC<PhotosManagerProps> = ({ photos, chapters, 
         <button
           type="submit"
           disabled={isSubmitting}
-          className="px-6 py-2 bg-[#B9905A] text-[#1A1D1B] font-bold text-xs uppercase tracking-wider rounded hover:bg-[#D4AF77] transition-colors"
+          className="px-6 py-2.5 bg-gradient-to-r from-[#c9a463] to-[#b88d48] text-[#0e0407] font-bold text-xs uppercase tracking-wider rounded-lg hover:brightness-110 transition-all shadow-[0_2px_12px_rgba(201,164,99,0.25)]"
         >
           {isSubmitting ? 'Adding...' : 'Save & Publish Photo'}
         </button>
@@ -147,24 +147,24 @@ export const PhotosManager: React.FC<PhotosManagerProps> = ({ photos, chapters, 
         {photos.map((photo) => (
           <div
             key={photo.id}
-            className="bg-[#1A1D1B] border border-[#B9905A]/30 p-3 rounded-lg flex space-x-3 items-center"
+            className="bg-[#16060b] border border-[rgba(201,164,99,0.22)] p-3 rounded-xl flex space-x-3 items-center hover:border-[rgba(201,164,99,0.45)] transition-all shadow-md"
           >
             <img
               src={photo.imageUrl}
               alt={photo.title}
-              className="w-16 h-16 object-cover rounded bg-charcoal flex-shrink-0"
+              className="w-16 h-16 object-cover rounded-lg bg-[#220912] flex-shrink-0 border border-[rgba(201,164,99,0.2)]"
             />
             <div className="flex-1 min-w-0">
-              <h4 className="font-serif text-sm font-bold text-[#EFE6CA] truncate">
+              <h4 className="font-serif text-sm font-bold text-[#f2e8d5] truncate">
                 {photo.title}
               </h4>
-              <p className="text-[11px] text-[#44636A] truncate">
+              <p className="text-[11px] text-[rgba(201,164,99,0.7)] truncate">
                 Style: {photo.layoutStyle}
               </p>
             </div>
             <button
               onClick={() => handleDelete(photo.id)}
-              className="p-2 text-red-400 hover:text-red-300 hover:bg-red-950/40 rounded transition-colors"
+              className="p-2 text-red-400 hover:text-red-300 hover:bg-[#320f18] rounded-lg transition-colors"
             >
               <Trash2 className="w-4 h-4" />
             </button>
