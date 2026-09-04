@@ -16,9 +16,15 @@ export interface Photo {
   chapterId?: number | null;
   title: string;
   caption?: string | null;
+  description?: string | null;
   imageUrl: string;
   driveFileId?: string | null;
   layoutStyle: 'polaroid' | 'torn_edge' | 'vintage_frame' | 'full_bleed' | string;
+  category?: string | null;
+  date?: string | null;
+  location?: string | null;
+  uploadedBy?: string | null;
+  likes?: number;
   isFeatured: boolean;
   status: 'draft' | 'published' | 'archived' | string;
   displayOrder: number;

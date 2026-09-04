@@ -29,9 +29,15 @@ export const photos = pgTable('photos', {
   chapterId: integer('chapter_id').references(() => chapters.id, { onDelete: 'cascade' }),
   title: text('title').notNull(),
   caption: text('caption'),
+  description: text('description'),
   imageUrl: text('image_url').notNull(),
   driveFileId: text('drive_file_id'),
   layoutStyle: varchar('layout_style', { length: 50 }).default('standard').notNull(), // polaroid, torn_edge, vintage_frame, full_bleed
+  category: varchar('category', { length: 100 }).default('MEMORIES'),
+  date: text('date'),
+  location: text('location'),
+  uploadedBy: text('uploaded_by'),
+  likes: integer('likes').default(0).notNull(),
   isFeatured: boolean('is_featured').default(false).notNull(),
   status: varchar('status', { length: 20 }).default('published').notNull(), // draft, published, archived
   displayOrder: integer('display_order').default(0).notNull(),

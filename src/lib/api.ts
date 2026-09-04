@@ -22,9 +22,10 @@ export async function fetchChapters(admin = false): Promise<Chapter[]> {
   }
 }
 
-export async function fetchPhotos(chapterId?: number, admin = false): Promise<Photo[]> {
+export async function fetchPhotos(category?: string, chapterId?: number, admin = false): Promise<Photo[]> {
   try {
     const query = new URLSearchParams();
+    if (category && category.toUpperCase() !== 'ALL') query.append('category', category);
     if (chapterId) query.append('chapterId', String(chapterId));
     if (admin) query.append('admin', 'true');
     const res = await fetch(`${API_BASE}/photos?${query.toString()}`);
@@ -32,6 +33,15 @@ export async function fetchPhotos(chapterId?: number, admin = false): Promise<Ph
     return json.data || [];
   } catch (err) {
     return [];
+  }
+}
+
+export async function likePhoto(id: number): Promise<{ success: boolean; likes?: number; data?: Photo }> {
+  try {
+    const res = await fetch(`${API_BASE}/photos/${id}/like`, { method: 'POST' });
+    return await res.json();
+  } catch (err) {
+    return { success: false };
   }
 }
 
@@ -126,6 +136,15 @@ export async function adminLogin(username: string, password: string) {
 export async function adminAddPhoto(data: Partial<Photo>) {
   const res = await fetch(`${API_BASE}/photos`, {
     method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
+    body: JSON.stringify(data),
+  });
+  return res.json();
+}
+
+export async function adminUpdatePhoto(id: number, data: Partial<Photo>) {
+  const res = await fetch(`${API_BASE}/photos/${id}`, {
+    method: 'PUT',
     headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
     body: JSON.stringify(data),
   });

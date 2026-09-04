@@ -33,6 +33,7 @@ import {
   InteractiveChaptersBook,
 } from "./book/PhysicalBook.tsx";
 import { ApologyPage } from "./components/ApologyPage.tsx";
+import { GallerySection } from "./components/GallerySection.tsx";
 import {
   fetchChapters,
   fetchPhotos,
@@ -2147,12 +2148,18 @@ const ImageViewer: React.FC<{ src: string | null; onClose: () => void }> = ({
   onClose,
 }) => {
   useEffect(() => {
+    if (!src) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [src, onClose]);
 
   if (!src) return null;
 
@@ -2163,10 +2170,12 @@ const ImageViewer: React.FC<{ src: string | null; onClose: () => void }> = ({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
+        transition={{ duration: 0.25 }}
         onClick={(e) => e.target === e.currentTarget && onClose()}
       >
         <button
           onClick={onClose}
+          aria-label="Close Fullscreen View"
           style={{
             position: "absolute",
             top: 20,
@@ -2174,24 +2183,26 @@ const ImageViewer: React.FC<{ src: string | null; onClose: () => void }> = ({
             background: "none",
             border: "none",
             cursor: "pointer",
-            color: "rgba(242,232,213,0.7)",
+            color: "rgba(242,232,213,0.8)",
+            zIndex: 310,
           }}
         >
-          <X size={30} />
+          <X size={32} />
         </button>
         <motion.img
           src={src}
           alt="Fullscreen"
-          initial={{ opacity: 0, scale: 0.88 }}
+          initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          exit={{ opacity: 0, scale: 0.92 }}
+          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           style={{
-            maxWidth: "90vw",
-            maxHeight: "88vh",
+            maxWidth: "92vw",
+            maxHeight: "90vh",
             objectFit: "contain",
-            borderRadius: 4,
-            boxShadow: "0 40px 100px rgba(0,0,0,0.9)",
-            filter: "sepia(15%) saturate(0.9)",
+            borderRadius: 8,
+            boxShadow: "0 40px 100px rgba(0,0,0,0.95), 0 0 40px rgba(201,164,99,0.15)",
+            border: "1px solid rgba(201,164,99,0.2)",
           }}
         />
       </motion.div>
@@ -2217,7 +2228,7 @@ const AdminShell: React.FC<{
   const loadAll = useCallback(async () => {
     const [c, ph, v, t, m_pending, m_approved, m_rejected, l, p] = await Promise.all([
       fetchChapters(true),
-      fetchPhotos(undefined, true),
+      fetchPhotos(undefined, undefined, true),
       fetchVideos(undefined, true),
       fetchTeachers(true),
       fetchMemories("pending"),
@@ -2308,6 +2319,9 @@ export function App() {
 
       {/* ONE LAST PAGE — Apology / Gratitude note */}
       <ApologyPage />
+
+      {/* 3D DEPTH CARD CAROUSEL GALLERY SECTION */}
+      <GallerySection onImageClick={(src) => setViewerSrc(src)} />
 
       {/* CLOSING SECTION */}
       <ClosingSection />
