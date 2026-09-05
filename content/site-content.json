@@ -27,12 +27,35 @@
       "id": 6,
       "category": "GIFTS",
       "title": "Handcrafted Honor",
-      "caption": "Custom sketched charcoal portraits presented with heartfelt notes.",
-      "imageUrl": "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&w=1200&q=80",
+      "caption": "A small token of gratitude.",
+      "imageUrl": "https://res.cloudinary.com/k6qlzfvx/image/upload/v1788608222/IMG20260903145153.jpg",
       "likes": 110,
       "isFeatured": true,
       "displayOrder": 6,
-      "createdAt": "2026-09-04T14:45:00Z"
+      "createdAt": "2026-09-04T14:45:00Z",
+      "driveFileId": null
+    },
+    {
+      "id": 7,
+      "category": "CANDID",
+      "title": "Warm Reflections",
+      "caption": "Professors and students conversing together during lunch break.",
+      "imageUrl": "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=1200&q=80",
+      "likes": 176,
+      "isFeatured": true,
+      "displayOrder": 7,
+      "createdAt": "2026-09-04T15:30:00Z"
+    },
+    {
+      "id": 8,
+      "category": "MEMORIES",
+      "title": "Standing Ovation",
+      "caption": "Golden confetti showering the stage at the grand finale.",
+      "imageUrl": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=80",
+      "likes": 210,
+      "isFeatured": true,
+      "displayOrder": 8,
+      "createdAt": "2026-09-04T17:00:00Z"
     },
     {
       "id": 9,
