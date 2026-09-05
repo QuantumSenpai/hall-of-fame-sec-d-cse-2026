@@ -35,17 +35,6 @@
       "createdAt": "2026-09-04T14:45:00Z"
     },
     {
-      "id": 7,
-      "category": "CANDID",
-      "title": "Warm Reflections",
-      "caption": "Professors and students conversing together during lunch break.",
-      "imageUrl": "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=1200&q=80",
-      "likes": 176,
-      "isFeatured": true,
-      "displayOrder": 7,
-      "createdAt": "2026-09-04T15:30:00Z"
-    },
-    {
       "id": 8,
       "category": "MEMORIES",
       "title": "Standing Ovation",
