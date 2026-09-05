@@ -24,17 +24,6 @@
       "driveFileId": null
     },
     {
-      "id": 4,
-      "category": "STUDENTS",
-      "title": "Behind The Curtains",
-      "caption": "Section-D volunteers coordinating technical lighting and audio.",
-      "imageUrl": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80",
-      "likes": 64,
-      "isFeatured": true,
-      "displayOrder": 4,
-      "createdAt": "2026-09-04T11:20:00Z"
-    },
-    {
       "id": 5,
       "category": "ACTIVITIES",
       "title": "Unscripted Joy",
