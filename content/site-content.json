@@ -181,6 +181,18 @@
       "isFeatured": false,
       "displayOrder": 6,
       "createdAt": "2026-09-05T11:46:03.963Z"
+    },
+    {
+      "id": 1788608787994,
+      "title": "Gulabi Aankhein 🎶 | Students’ Jam Session",
+      "description": "Teachers Day 2026",
+      "youtubeUrl": "https://www.youtube.com/watch?v=JoIad8wjeSA",
+      "youtubeId": "JoIad8wjeSA",
+      "thumbnailUrl": "https://img.youtube.com/vi/JoIad8wjeSA/hqdefault.jpg",
+      "isShort": false,
+      "isFeatured": false,
+      "displayOrder": 7,
+      "createdAt": "2026-09-05T11:46:27.994Z"
     }
   ],
   "teachers": [
