@@ -52,11 +52,26 @@ export function getAdminCredentials(): {
 }
 
 /**
- * Startup assertion helper to verify all critical auth environment variables
+ * Validates and retrieves the DATABASE_URL from the environment.
+ * Throws a critical error if missing — fail-fast pattern.
+ */
+export function getDatabaseUrl(): string {
+  const url = process.env.DATABASE_URL;
+  if (!url || url.trim() === '') {
+    throw new Error(
+      'CRITICAL CONFIG ERROR: DATABASE_URL environment variable is missing. Refusing to start server without database connection.'
+    );
+  }
+  return url;
+}
+
+/**
+ * Startup assertion helper to verify all critical environment variables
  */
 export function validateAuthEnvironment(): void {
   getJwtSecret();
   getAdminCredentials();
+  getDatabaseUrl();
 }
 
 /**

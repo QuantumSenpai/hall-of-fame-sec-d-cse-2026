@@ -1,6 +1,7 @@
 import { Router } from 'express';
+import { eq } from 'drizzle-orm';
 import { verifyAdmin } from '../lib/auth.js';
-import { getSiteContent, commitSiteContent } from '../lib/github.js';
+import { getDb, schema } from '../db/index.js';
 import { formatGDriveImageUrl } from '../lib/media.js';
 
 const router = Router();
@@ -8,10 +9,12 @@ const router = Router();
 // GET /people
 router.get('/', async (_req, res) => {
   try {
-    const content = await getSiteContent();
-    const people = content.people || [];
-    return res.status(200).json({ success: true, count: people.length, data: people });
+    const db = getDb();
+    const peopleList = await db.select().from(schema.people);
+    peopleList.sort((a: any, b: any) => (a.displayOrder || 0) - (b.displayOrder || 0) || a.id - b.id);
+    return res.status(200).json({ success: true, count: peopleList.length, data: peopleList });
   } catch (err: any) {
+    console.error('Error fetching people from database:', err);
     return res.status(500).json({ error: 'Failed to fetch people', details: err.message });
   }
 });
@@ -29,24 +32,28 @@ router.post('/', async (req, res) => {
     return res.status(400).json({ error: 'Name and role are required.' });
   }
 
-  const siteContent = await getSiteContent();
-  siteContent.people = siteContent.people || [];
+  try {
+    const db = getDb();
+    const existing = await db.select().from(schema.people);
+    const maxOrder = existing.reduce((max: number, p: any) => Math.max(max, p.displayOrder || 0), 0);
 
-  const newPerson = {
-    id: Date.now(),
-    name,
-    role,
-    team: team || 'organizer',
-    photoUrl: photoUrl ? formatGDriveImageUrl(photoUrl) : null,
-    bio: bio || null,
-    displayOrder: siteContent.people.length + 1,
-    createdAt: new Date().toISOString(),
-  };
+    const [newPerson] = await db
+      .insert(schema.people)
+      .values({
+        name,
+        role,
+        team: team || 'organizer',
+        photoUrl: photoUrl ? formatGDriveImageUrl(photoUrl) : null,
+        bio: bio || null,
+        displayOrder: maxOrder + 1,
+      })
+      .returning();
 
-  siteContent.people.push(newPerson);
-  await commitSiteContent(siteContent, `Add contributor: "${name}"`);
-
-  return res.status(201).json({ success: true, data: newPerson });
+    return res.status(201).json({ success: true, data: newPerson });
+  } catch (err: any) {
+    console.error('Error inserting person:', err);
+    return res.status(500).json({ error: 'Failed to create person record', details: err.message });
+  }
 });
 
 // PUT /people (Admin auth required)
@@ -59,20 +66,29 @@ router.put('/', async (req, res) => {
   const id = Number(req.query?.id || req.body?.id);
   if (!id) return res.status(400).json({ error: 'Person ID required' });
 
-  const siteContent = await getSiteContent();
-  const idx = (siteContent.people || []).findIndex((p: any) => Number(p.id) === id);
-  if (idx === -1) return res.status(404).json({ error: 'Person not found' });
+  try {
+    const db = getDb();
+    const [existing] = await db.select().from(schema.people).where(eq(schema.people.id, id));
+    if (!existing) return res.status(404).json({ error: 'Person not found' });
 
-  const existing = siteContent.people[idx];
-  const updateData = { ...req.body };
-  if (updateData.photoUrl) {
-    updateData.photoUrl = formatGDriveImageUrl(updateData.photoUrl);
+    const updateData: any = { ...req.body };
+    delete updateData.id;
+
+    if (updateData.photoUrl) {
+      updateData.photoUrl = formatGDriveImageUrl(updateData.photoUrl);
+    }
+
+    const [updated] = await db
+      .update(schema.people)
+      .set(updateData)
+      .where(eq(schema.people.id, id))
+      .returning();
+
+    return res.status(200).json({ success: true, data: updated });
+  } catch (err: any) {
+    console.error('Error updating person:', err);
+    return res.status(500).json({ error: 'Failed to update person record', details: err.message });
   }
-
-  siteContent.people[idx] = { ...existing, ...updateData, id };
-  await commitSiteContent(siteContent, `Update contributor #${id} ("${siteContent.people[idx].name}")`);
-
-  return res.status(200).json({ success: true, data: siteContent.people[idx] });
 });
 
 // DELETE /people (Admin auth required)
@@ -85,12 +101,14 @@ router.delete('/', async (req, res) => {
   const id = Number(req.query?.id || req.body?.id);
   if (!id) return res.status(400).json({ error: 'Person ID required' });
 
-  const siteContent = await getSiteContent();
-  siteContent.people = (siteContent.people || []).filter((p: any) => Number(p.id) !== id);
-
-  await commitSiteContent(siteContent, `Delete contributor #${id}`);
-
-  return res.status(200).json({ success: true });
+  try {
+    const db = getDb();
+    await db.delete(schema.people).where(eq(schema.people.id, id));
+    return res.status(200).json({ success: true });
+  } catch (err: any) {
+    console.error('Error deleting person:', err);
+    return res.status(500).json({ error: 'Failed to delete person record', details: err.message });
+  }
 });
 
 export default router;

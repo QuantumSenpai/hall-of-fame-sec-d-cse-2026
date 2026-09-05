@@ -1,15 +1,18 @@
 import { Router } from 'express';
+import { eq } from 'drizzle-orm';
 import { verifyAdmin } from '../lib/auth.js';
-import { getSiteContent, commitSiteContent } from '../lib/github.js';
+import { getDb, schema } from '../db/index.js';
 
 const router = Router();
 
 // GET /apology
 router.get('/', async (_req, res) => {
   try {
-    const content = await getSiteContent();
-    return res.status(200).json({ success: true, data: content.apology || {} });
+    const db = getDb();
+    const [apologyData] = await db.select().from(schema.apology).limit(1);
+    return res.status(200).json({ success: true, data: apologyData || {} });
   } catch (err: any) {
+    console.error('Error fetching apology from database:', err);
     return res.status(500).json({ error: 'Failed to fetch apology content', details: err.message });
   }
 });
@@ -22,25 +25,33 @@ router.put('/', async (req, res) => {
   }
 
   try {
-    const siteContent = await getSiteContent();
-    const updatedApology = {
-      ...siteContent.apology,
-      ...req.body,
-    };
+    const db = getDb();
+    const [existing] = await db.select().from(schema.apology).limit(1);
 
-    // Ensure paragraphs is an array if provided as text or array
-    if (typeof updatedApology.paragraphs === 'string') {
-      updatedApology.paragraphs = (updatedApology.paragraphs as string)
+    const updateData: any = { ...req.body, updatedAt: new Date() };
+    delete updateData.id;
+
+    if (typeof updateData.paragraphs === 'string') {
+      updateData.paragraphs = updateData.paragraphs
         .split('\n\n')
         .map((p: string) => p.trim())
         .filter(Boolean);
     }
 
-    siteContent.apology = updatedApology;
-    await commitSiteContent(siteContent, 'Update Thank You & Apology section content');
+    let updatedApology;
+    if (existing) {
+      [updatedApology] = await db
+        .update(schema.apology)
+        .set(updateData)
+        .where(eq(schema.apology.id, existing.id))
+        .returning();
+    } else {
+      [updatedApology] = await db.insert(schema.apology).values(updateData).returning();
+    }
 
     return res.status(200).json({ success: true, data: updatedApology });
   } catch (err: any) {
+    console.error('Error updating apology:', err);
     return res.status(500).json({ error: 'Failed to update apology content', details: err.message });
   }
 });

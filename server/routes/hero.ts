@@ -1,15 +1,18 @@
 import { Router } from 'express';
+import { eq } from 'drizzle-orm';
 import { verifyAdmin } from '../lib/auth.js';
-import { getSiteContent, commitSiteContent } from '../lib/github.js';
+import { getDb, schema } from '../db/index.js';
 
 const router = Router();
 
 // GET /hero
 router.get('/', async (_req, res) => {
   try {
-    const content = await getSiteContent();
-    return res.status(200).json({ success: true, data: content.hero || {} });
+    const db = getDb();
+    const [heroData] = await db.select().from(schema.hero).limit(1);
+    return res.status(200).json({ success: true, data: heroData || {} });
   } catch (err: any) {
+    console.error('Error fetching hero from database:', err);
     return res.status(500).json({ error: 'Failed to fetch hero content', details: err.message });
   }
 });
@@ -22,17 +25,26 @@ router.put('/', async (req, res) => {
   }
 
   try {
-    const siteContent = await getSiteContent();
-    const updatedHero = {
-      ...siteContent.hero,
-      ...req.body,
-    };
+    const db = getDb();
+    const [existing] = await db.select().from(schema.hero).limit(1);
 
-    siteContent.hero = updatedHero;
-    await commitSiteContent(siteContent, 'Update Hero section content');
+    const updateData: any = { ...req.body, updatedAt: new Date() };
+    delete updateData.id;
+
+    let updatedHero;
+    if (existing) {
+      [updatedHero] = await db
+        .update(schema.hero)
+        .set(updateData)
+        .where(eq(schema.hero.id, existing.id))
+        .returning();
+    } else {
+      [updatedHero] = await db.insert(schema.hero).values(updateData).returning();
+    }
 
     return res.status(200).json({ success: true, data: updatedHero });
   } catch (err: any) {
+    console.error('Error updating hero:', err);
     return res.status(500).json({ error: 'Failed to update hero content', details: err.message });
   }
 });
