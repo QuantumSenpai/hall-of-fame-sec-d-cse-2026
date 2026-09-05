@@ -18,8 +18,17 @@ import teachersHandler from '../api/teachers.ts';
 import memoriesHandler from '../api/memories.ts';
 import memoryStatusHandler from '../api/memories/[id]/status.ts';
 import peopleHandler from '../api/people.ts';
+import { validateAuthEnvironment } from '../api/lib/auth.ts';
 
 dotenv.config();
+
+// Enforce critical security environment variables on server boot
+try {
+  validateAuthEnvironment();
+} catch (err: any) {
+  console.error('\n❌ [SERVER STARTUP ABORTED] ' + err.message + '\n');
+  process.exit(1);
+}
 
 const app = express();
 const PORT = process.env.PORT || 5000;

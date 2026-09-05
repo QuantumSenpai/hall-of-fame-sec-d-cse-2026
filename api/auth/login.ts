@@ -21,20 +21,27 @@ export default async function handler(req: any, res: any) {
     return res.status(400).json({ error: 'Username and password are required' });
   }
 
-  const isValid = await verifyCredentials(username, password);
-  if (!isValid) {
-    return res.status(401).json({ error: 'Invalid admin credentials' });
+  try {
+    const isValid = await verifyCredentials(username, password);
+    if (!isValid) {
+      return res.status(401).json({ error: 'Invalid admin credentials' });
+    }
+
+    const token = generateAdminToken(username);
+    setAdminCookie(res, token);
+
+    // Security essential: Return user info WITHOUT the JWT token in response body
+    return res.status(200).json({
+      success: true,
+      user: {
+        username,
+        role: 'admin',
+      },
+    });
+  } catch (err: any) {
+    console.error('CRITICAL AUTH CONFIG ERROR:', err.message);
+    return res.status(500).json({
+      error: 'Authentication is disabled: required server credentials (ADMIN_PASSWORD or JWT_SECRET) are unconfigured.',
+    });
   }
-
-  const token = generateAdminToken(username);
-  setAdminCookie(res, token);
-
-  // Security essential: Return user info WITHOUT the JWT token in response body
-  return res.status(200).json({
-    success: true,
-    user: {
-      username,
-      role: 'admin',
-    },
-  });
 }

@@ -3,39 +3,94 @@ import bcrypt from 'bcryptjs';
 import * as cookie from 'cookie';
 import type { IncomingMessage, ServerResponse } from 'http';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'teachers_day_2026_super_secret_jwt_key_fallback';
-const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
-const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH;
-const DEFAULT_PASSWORD = process.env.ADMIN_PASSWORD || 'teachersday2026';
-
 export interface AdminPayload {
   username: string;
   role: string;
 }
 
 /**
- * Validates admin credentials against ADMIN_PASSWORD_HASH or default fallback password
+ * Validates and retrieves the JWT signing secret from the environment.
+ * Throws a critical error if missing — NEVER silently falls back to a hardcoded string.
+ */
+export function getJwtSecret(): string {
+  const secret = process.env.JWT_SECRET;
+  if (!secret || secret.trim() === '') {
+    throw new Error(
+      'CRITICAL SECURITY ERROR: JWT_SECRET environment variable is missing. Refusing to run with insecure auth defaults.'
+    );
+  }
+  return secret;
+}
+
+/**
+ * Validates and retrieves the Admin configuration from the environment.
+ * Throws a critical error if neither password nor hash is configured.
+ */
+export function getAdminCredentials(): {
+  username: string;
+  password?: string;
+  passwordHash?: string;
+} {
+  const username = process.env.ADMIN_USERNAME || 'admin';
+  const passwordHash = process.env.ADMIN_PASSWORD_HASH;
+  const password = process.env.ADMIN_PASSWORD;
+
+  const hasPassword = Boolean(password && password.trim() !== '');
+  const hasHash = Boolean(passwordHash && passwordHash.trim() !== '');
+
+  if (!hasPassword && !hasHash) {
+    throw new Error(
+      'CRITICAL SECURITY ERROR: Neither ADMIN_PASSWORD nor ADMIN_PASSWORD_HASH environment variable is configured. Refusing to start or authenticate with fallback credentials.'
+    );
+  }
+
+  return {
+    username,
+    password: hasPassword ? password : undefined,
+    passwordHash: hasHash ? passwordHash : undefined,
+  };
+}
+
+/**
+ * Startup assertion helper to verify all critical auth environment variables
+ */
+export function validateAuthEnvironment(): void {
+  getJwtSecret();
+  getAdminCredentials();
+}
+
+/**
+ * Validates admin credentials against ADMIN_PASSWORD_HASH (bcrypt) or ADMIN_PASSWORD.
+ * Throws if auth environment is unconfigured.
  */
 export async function verifyCredentials(username: string, password: string): Promise<boolean> {
-  if (username !== ADMIN_USERNAME) return false;
+  const creds = getAdminCredentials();
+  if (!username || !password) return false;
+  if (username !== creds.username) return false;
 
-  if (ADMIN_PASSWORD_HASH) {
+  // 1. Bcrypt hash check (recommended for production)
+  if (creds.passwordHash) {
     try {
-      return await bcrypt.compare(password, ADMIN_PASSWORD_HASH);
+      return await bcrypt.compare(password, creds.passwordHash);
     } catch {
       return false;
     }
   }
 
-  // Fallback direct check or generate hash on the fly
-  return password === DEFAULT_PASSWORD;
+  // 2. Direct string comparison (fallback to ADMIN_PASSWORD only)
+  if (creds.password) {
+    return password === creds.password;
+  }
+
+  return false;
 }
 
 /**
- * Signs an admin JWT token
+ * Signs an admin JWT token using the validated JWT_SECRET
  */
 export function generateAdminToken(username: string): string {
-  return jwt.sign({ username, role: 'admin' }, JWT_SECRET, { expiresIn: '7d' });
+  const secret = getJwtSecret();
+  return jwt.sign({ username, role: 'admin' }, secret, { expiresIn: '7d' });
 }
 
 /**
@@ -81,7 +136,8 @@ export function verifyAdmin(req: IncomingMessage | any): AdminPayload | null {
   if (!token) return null;
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as AdminPayload;
+    const secret = getJwtSecret();
+    const decoded = jwt.verify(token, secret) as AdminPayload;
     if (decoded && decoded.role === 'admin') {
       return decoded;
     }
