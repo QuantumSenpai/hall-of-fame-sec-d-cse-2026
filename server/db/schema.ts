@@ -2,7 +2,7 @@ import { pgTable, text, integer, boolean, varchar, jsonb, bigint, serial } from 
 
 // Photos table
 export const photos = pgTable('photos', {
-  id: bigint('id', { mode: 'number' }).primaryKey(),
+  id: bigint('id', { mode: 'number' }).primaryKey().$defaultFn(() => Date.now()),
   title: text('title').notNull(),
   caption: text('caption'),
   description: text('description'),
@@ -22,7 +22,7 @@ export const photos = pgTable('photos', {
 
 // Videos table
 export const videos = pgTable('videos', {
-  id: bigint('id', { mode: 'number' }).primaryKey(),
+  id: bigint('id', { mode: 'number' }).primaryKey().$defaultFn(() => Date.now()),
   title: text('title').notNull(),
   description: text('description'),
   youtubeUrl: text('youtube_url').notNull(),
@@ -37,7 +37,7 @@ export const videos = pgTable('videos', {
 
 // Teachers table
 export const teachers = pgTable('teachers', {
-  id: bigint('id', { mode: 'number' }).primaryKey(),
+  id: bigint('id', { mode: 'number' }).primaryKey().$defaultFn(() => Date.now()),
   name: text('name').notNull(),
   department: text('department').notNull(),
   photoUrl: text('photo_url'),
@@ -52,7 +52,7 @@ export const teachers = pgTable('teachers', {
 
 // People / Contributors table
 export const people = pgTable('people', {
-  id: bigint('id', { mode: 'number' }).primaryKey(),
+  id: bigint('id', { mode: 'number' }).primaryKey().$defaultFn(() => Date.now()),
   name: text('name').notNull(),
   role: text('role').notNull(),
   team: varchar('team', { length: 50 }).default('organizer').notNull(),
@@ -64,7 +64,7 @@ export const people = pgTable('people', {
 
 // Student Memories table (Moderated)
 export const memories = pgTable('memories', {
-  id: bigint('id', { mode: 'number' }).primaryKey(),
+  id: bigint('id', { mode: 'number' }).primaryKey().$defaultFn(() => Date.now()),
   authorName: text('author_name').notNull(),
   authorRole: text('author_role').default('Student').notNull(),
   message: text('message').notNull(),
