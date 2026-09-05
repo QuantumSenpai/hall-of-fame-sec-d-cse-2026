@@ -1,6 +1,6 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import { validateAuthEnvironment } from './lib/auth.js';
 
 import authRouter from './routes/auth.js';
@@ -12,8 +12,6 @@ import videosRouter from './routes/videos.js';
 import teachersRouter from './routes/teachers.js';
 import memoriesRouter from './routes/memories.js';
 import peopleRouter from './routes/people.js';
-
-dotenv.config();
 
 // Enforce critical security environment variables on initialization
 try {
