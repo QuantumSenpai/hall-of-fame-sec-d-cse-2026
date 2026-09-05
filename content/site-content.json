@@ -12,17 +12,6 @@
   },
   "photos": [
     {
-      "id": 1,
-      "category": "OUR STORY",
-      "title": "A Frozen Moment",
-      "caption": "Early morning floral foyer before the arrival of our mentors.",
-      "imageUrl": "https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=1200&q=80",
-      "likes": 42,
-      "isFeatured": true,
-      "displayOrder": 1,
-      "createdAt": "2026-09-04T07:15:00Z"
-    },
-    {
       "id": 2,
       "category": "GREAT MOMENTS",
       "title": "UDB",
