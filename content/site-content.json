@@ -13,26 +13,26 @@
   "photos": [
     {
       "id": 1,
-      "category": "TEACHERS",
-      "title": "Teachers",
-      "caption": "Our Mentors",
-      "imageUrl": "https://res.cloudinary.com/k6qlzfvx/image/upload/v1788608870/IMG20260903151050.jpg",
+      "category": "OUR STORY",
+      "title": "A Frozen Moment",
+      "caption": "Early morning floral foyer before the arrival of our mentors.",
+      "imageUrl": "https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=1200&q=80",
       "likes": 42,
       "isFeatured": true,
       "displayOrder": 1,
-      "createdAt": "2026-09-04T07:15:00Z",
-      "driveFileId": null
+      "createdAt": "2026-09-04T07:15:00Z"
     },
     {
       "id": 2,
       "category": "GREAT MOMENTS",
-      "title": "The Golden Flame",
-      "caption": "Inaugurating the celebration with the ceremonial brass lamp.",
-      "imageUrl": "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=1200&q=80",
+      "title": "UDB",
+      "caption": "Vibing with Prabhat Sir",
+      "imageUrl": "https://res.cloudinary.com/k6qlzfvx/image/upload/v1788608854/IMG20260903121645.jpg",
       "likes": 88,
       "isFeatured": true,
       "displayOrder": 2,
-      "createdAt": "2026-09-04T09:30:00Z"
+      "createdAt": "2026-09-04T09:30:00Z",
+      "driveFileId": null
     },
     {
       "id": 3,
