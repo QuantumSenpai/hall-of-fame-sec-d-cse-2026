@@ -63,26 +63,26 @@ export function validateAuthEnvironment(): void {
  * Validates admin credentials against ADMIN_PASSWORD_HASH (bcrypt) or ADMIN_PASSWORD.
  * Throws if auth environment is unconfigured.
  */
-export async function verifyCredentials(username: string, password: string): Promise<boolean> {
+export function verifyCredentials(username: string, password: string): Promise<boolean> {
   const creds = getAdminCredentials();
-  if (!username || !password) return false;
-  if (username !== creds.username) return false;
+  if (!username || !password) return Promise.resolve(false);
+  if (username !== creds.username) return Promise.resolve(false);
 
   // 1. Bcrypt hash check (recommended for production)
   if (creds.passwordHash) {
     try {
-      return await bcrypt.compare(password, creds.passwordHash);
+      return bcrypt.compare(password, creds.passwordHash);
     } catch {
-      return false;
+      return Promise.resolve(false);
     }
   }
 
   // 2. Direct string comparison (fallback to ADMIN_PASSWORD only)
   if (creds.password) {
-    return password === creds.password;
+    return Promise.resolve(password === creds.password);
   }
 
-  return false;
+  return Promise.resolve(false);
 }
 
 /**

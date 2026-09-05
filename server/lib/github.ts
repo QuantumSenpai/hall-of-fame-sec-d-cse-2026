@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 export interface SiteContent {
   hero: any;
@@ -15,6 +16,9 @@ const GITHUB_OWNER = process.env.GITHUB_OWNER || 'QuantumSenpai';
 const GITHUB_REPO = process.env.GITHUB_REPO || 'hall-of-fame-sec-d-cse-2026';
 const GITHUB_BRANCH = process.env.GITHUB_BRANCH || 'main';
 const CONTENT_FILE_PATH = 'content/site-content.json';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // In-memory cache for raw content to avoid rate limit spikes on GitHub raw API
 let rawContentCache: { data: SiteContent; timestamp: number } | null = null;
@@ -57,17 +61,22 @@ export async function getSiteContent(): Promise<SiteContent> {
   // Local filesystem read
   try {
     const localPath = path.resolve(process.cwd(), CONTENT_FILE_PATH);
-    const raw = await fs.promises.readFile(localPath, 'utf-8');
-    const data = JSON.parse(raw) as SiteContent;
-    rawContentCache = { data, timestamp: Date.now() };
-    return data;
-  } catch (err) {
-    // If local path lookup fails (e.g. nested cwd in serverless runner)
-    const fallbackPath = path.join(__dirname, '../../content/site-content.json');
+    if (fs.existsSync(localPath)) {
+      const raw = await fs.promises.readFile(localPath, 'utf-8');
+      const data = JSON.parse(raw) as SiteContent;
+      rawContentCache = { data, timestamp: Date.now() };
+      return data;
+    }
+    // Fallback relative to __dirname
+    const fallbackPath = path.resolve(__dirname, '../../content/site-content.json');
     if (fs.existsSync(fallbackPath)) {
       const raw = await fs.promises.readFile(fallbackPath, 'utf-8');
-      return JSON.parse(raw);
+      const data = JSON.parse(raw) as SiteContent;
+      rawContentCache = { data, timestamp: Date.now() };
+      return data;
     }
+    throw new Error(`Could not find ${CONTENT_FILE_PATH} in cwd or relative to module`);
+  } catch (err) {
     throw err;
   }
 }

@@ -125,7 +125,7 @@ export async function removePendingMemory(id: number | string): Promise<any | nu
 }
 
 // ============================================================
-// RATE LIMITING COUNTERS (Shared with api/lib/rateLimit.ts)
+// RATE LIMITING COUNTERS (Shared with server/lib/rateLimit.ts)
 // ============================================================
 
 export async function checkAndIncrementRateLimit(

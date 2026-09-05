@@ -1,12 +1,11 @@
+import { Router } from 'express';
 import { checkLoginRateLimit } from '../lib/rateLimit.ts';
-import { verifyCredentials, generateAdminToken, setAdminCookie } from '../lib/auth.ts';
+import { verifyCredentials, generateAdminToken, setAdminCookie, clearAdminCookie, verifyAdmin } from '../lib/auth.ts';
 
-export default async function handler(req: any, res: any) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+const router = Router();
 
-  // Rate Limiting (5 attempts per 15 minutes per IP)
+// POST /login (Rate Limiting: 5 attempts per 15 minutes per IP)
+router.post('/login', async (req, res) => {
   const rate = await checkLoginRateLimit(req);
   if (!rate.allowed) {
     return res.status(429).json({
@@ -44,4 +43,25 @@ export default async function handler(req: any, res: any) {
       error: 'Authentication is disabled: required server credentials (ADMIN_PASSWORD or JWT_SECRET) are unconfigured.',
     });
   }
-}
+});
+
+// GET /me
+router.get('/me', (req, res) => {
+  const admin = verifyAdmin(req);
+  if (!admin) {
+    return res.status(401).json({ authenticated: false });
+  }
+
+  return res.status(200).json({
+    authenticated: true,
+    user: admin,
+  });
+});
+
+// POST /logout
+router.post('/logout', (_req, res) => {
+  clearAdminCookie(res);
+  return res.status(200).json({ success: true, message: 'Logged out successfully' });
+});
+
+export default router;
