@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Photo, Chapter } from '../types/index.ts';
+import { Photo } from '../types/index.ts';
 import { adminAddPhoto, adminUpdatePhoto, adminDeletePhoto } from '../lib/api.ts';
-import { Plus, Trash2, Edit3, Image, HardDrive, Star, Check, X } from 'lucide-react';
+import { Plus, Trash2, Edit3, Image, Star, Check, X, RefreshCw, AlertCircle } from 'lucide-react';
 
 const CATEGORIES = [
   'OUR STORY',
@@ -17,109 +17,137 @@ const CATEGORIES = [
 
 interface PhotosManagerProps {
   photos: Photo[];
-  chapters: Chapter[];
   onRefresh: () => void;
 }
 
-export const PhotosManager: React.FC<PhotosManagerProps> = ({ photos, chapters, onRefresh }) => {
+export const PhotosManager: React.FC<PhotosManagerProps> = ({ photos, onRefresh }) => {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [title, setTitle] = useState('');
   const [caption, setCaption] = useState('');
-  const [description, setDescription] = useState('');
   const [category, setCategory] = useState('MEMORIES');
-  const [date, setDate] = useState('September 4, 2026');
-  const [location, setLocation] = useState('College Auditorium');
   const [imageUrl, setImageUrl] = useState('');
-  const [chapterId, setChapterId] = useState<number>(chapters[0]?.id || 1);
-  const [layoutStyle, setLayoutStyle] = useState<'polaroid' | 'torn_edge' | 'vintage_frame' | 'full_bleed'>('vintage_frame');
   const [isFeatured, setIsFeatured] = useState(true);
   const [displayOrder, setDisplayOrder] = useState<number>(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const resetForm = () => {
     setEditingId(null);
     setTitle('');
     setCaption('');
-    setDescription('');
     setCategory('MEMORIES');
-    setDate('September 4, 2026');
-    setLocation('College Auditorium');
     setImageUrl('');
-    setChapterId(chapters[0]?.id || 1);
-    setLayoutStyle('vintage_frame');
     setIsFeatured(true);
     setDisplayOrder(photos.length + 1);
+    setError(null);
   };
 
   const startEdit = (photo: Photo) => {
     setEditingId(photo.id);
     setTitle(photo.title);
     setCaption(photo.caption || '');
-    setDescription(photo.description || '');
     setCategory(photo.category || 'MEMORIES');
-    setDate(photo.date || 'September 4, 2026');
-    setLocation(photo.location || '');
     setImageUrl(photo.imageUrl);
-    setChapterId(photo.chapterId || chapters[0]?.id || 1);
-    setLayoutStyle((photo.layoutStyle as any) || 'vintage_frame');
     setIsFeatured(photo.isFeatured);
     setDisplayOrder(photo.displayOrder || 1);
+    setError(null);
     window.scrollTo({ top: 100, behavior: 'smooth' });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!imageUrl) return;
+    if (!imageUrl) {
+      setError('Image URL is required.');
+      return;
+    }
     setIsSubmitting(true);
+    setError(null);
 
     const payload = {
-      title: title || 'Untitled Memory',
+      title: title || 'A Frozen Moment',
       caption,
-      description,
       imageUrl,
       category,
-      date,
-      location,
-      chapterId: Number(chapterId),
-      layoutStyle,
       isFeatured,
       displayOrder: Number(displayOrder),
     };
 
-    if (editingId) {
-      await adminUpdatePhoto(editingId, payload);
-    } else {
-      await adminAddPhoto(payload);
+    try {
+      if (editingId) {
+        const res = await adminUpdatePhoto(editingId, payload);
+        if (res.success) {
+          resetForm();
+          onRefresh();
+        } else {
+          setError(res.error || 'Failed to update photo.');
+        }
+      } else {
+        const res = await adminAddPhoto(payload);
+        if (res.success) {
+          resetForm();
+          onRefresh();
+        } else {
+          setError(res.error || 'Failed to add photo.');
+        }
+      }
+    } catch (err: any) {
+      setError(err.message || 'An error occurred.');
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setIsSubmitting(false);
-    resetForm();
-    onRefresh();
   };
 
-  const handleDelete = async (id: number) => {
-    if (confirm('Are you sure you want to delete this photo memory?')) {
-      await adminDeletePhoto(id);
-      if (editingId === id) resetForm();
-      onRefresh();
+  const handleDelete = async (id: number, photoTitle: string) => {
+    if (confirm(`Are you sure you want to remove "${photoTitle}"?`)) {
+      try {
+        const res = await adminDeletePhoto(id);
+        if (res.success) {
+          onRefresh();
+        } else {
+          alert(res.error || 'Failed to delete photo.');
+        }
+      } catch (err: any) {
+        alert(err.message || 'An error occurred.');
+      }
     }
   };
 
   return (
-    <div className="space-y-8">
-      {/* Add / Edit Photo Form */}
-      <form onSubmit={handleSubmit} className="bg-[#16060b] border border-[rgba(201,164,99,0.25)] p-6 rounded-xl space-y-4 shadow-xl">
-        <div className="flex items-center justify-between border-b border-[rgba(201,164,99,0.2)] pb-3">
-          <h3 className="font-serif text-lg font-bold text-[#f2e8d5] flex items-center space-x-2">
+    <div className="space-y-8 max-w-5xl">
+      <div className="border-b border-[#C9A05C]/20 pb-5">
+        <div className="inline-flex items-center space-x-2 text-[#C9A05C] text-xs font-semibold uppercase tracking-widest mb-1">
+          <Image className="w-3.5 h-3.5" />
+          <span>Bento Grid Collection</span>
+        </div>
+        <h2 className="font-serif text-2xl font-bold text-[#F5EFE1]">Photos Gallery CMS</h2>
+        <p className="text-xs text-[#F5EFE1]/60 mt-1">
+          Manage photos displayed in the high-contrast Bento Grid. Each photo has a short label and italic one-line description.
+        </p>
+      </div>
+
+      {error && (
+        <div className="p-4 rounded-xl flex items-center space-x-3 text-sm bg-rose-950/40 border border-rose-500/30 text-rose-300">
+          <AlertCircle className="w-5 h-5 flex-shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
+
+      {/* Add/Edit Photo Form */}
+      <form
+        onSubmit={handleSubmit}
+        className="bg-[#16130E] border border-[#C9A05C]/25 p-6 rounded-xl space-y-5 shadow-xl"
+      >
+        <div className="flex items-center justify-between border-b border-[#C9A05C]/20 pb-3">
+          <h3 className="font-serif text-base font-bold text-[#F5EFE1] flex items-center space-x-2">
             {editingId ? (
               <>
-                <Edit3 className="w-5 h-5 text-[#e2c27e]" />
-                <span>Edit Photo Memory #{editingId}</span>
+                <Edit3 className="w-4 h-4 text-[#C9A05C]" />
+                <span>Edit Photo #{editingId}</span>
               </>
             ) : (
               <>
-                <Plus className="w-5 h-5 text-[#c9a463]" />
-                <span>Add New 3D Gallery Memory (Google Drive / Unsplash / Direct URL)</span>
+                <Plus className="w-4 h-4 text-[#C9A05C]" />
+                <span>Add New Photo to Bento Gallery</span>
               </>
             )}
           </h3>
@@ -127,7 +155,7 @@ export const PhotosManager: React.FC<PhotosManagerProps> = ({ photos, chapters, 
             <button
               type="button"
               onClick={resetForm}
-              className="text-xs text-[rgba(201,164,99,0.7)] hover:text-[#e2c27e] flex items-center space-x-1"
+              className="text-xs text-[#C9A05C] hover:text-[#F5EFE1] flex items-center space-x-1"
             >
               <X className="w-3.5 h-3.5" />
               <span>Cancel Edit</span>
@@ -135,29 +163,29 @@ export const PhotosManager: React.FC<PhotosManagerProps> = ({ photos, chapters, 
           )}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs uppercase tracking-wider text-[#c9a463] mb-1 font-semibold">
-              Photo Title *
+            <label className="block text-xs uppercase tracking-wider text-[#C9A05C] mb-1 font-semibold">
+              Short Label / Title *
             </label>
             <input
               type="text"
               required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g. Standing Ovation & Warm Hugs"
-              className="w-full px-3.5 py-2.5 bg-[#220a12] border border-[rgba(201,164,99,0.3)] rounded-lg text-sm text-[#f2e8d5] placeholder:text-[rgba(242,232,213,0.3)] focus:outline-none focus:border-[#c9a463] transition-colors"
+              placeholder="e.g. A Frozen Moment"
+              className="w-full px-3.5 py-2.5 bg-[#0D0B08] border border-[#C9A05C]/30 rounded-lg text-sm text-[#F5EFE1] placeholder:text-[#F5EFE1]/30 focus:outline-none focus:border-[#C9A05C] transition-colors"
             />
           </div>
 
           <div>
-            <label className="block text-xs uppercase tracking-wider text-[#c9a463] mb-1 font-semibold">
-              Gallery Category *
+            <label className="block text-xs uppercase tracking-wider text-[#C9A05C] mb-1 font-semibold">
+              Category Filter
             </label>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full px-3.5 py-2.5 bg-[#220a12] border border-[rgba(201,164,99,0.3)] rounded-lg text-sm text-[#f2e8d5] focus:outline-none focus:border-[#c9a463] transition-colors"
+              className="w-full px-3.5 py-2.5 bg-[#0D0B08] border border-[#C9A05C]/30 rounded-lg text-sm text-[#F5EFE1] focus:outline-none focus:border-[#C9A05C] transition-colors"
             >
               {CATEGORIES.map((cat) => (
                 <option key={cat} value={cat}>
@@ -167,185 +195,134 @@ export const PhotosManager: React.FC<PhotosManagerProps> = ({ photos, chapters, 
             </select>
           </div>
 
-          <div>
-            <label className="block text-xs uppercase tracking-wider text-[#c9a463] mb-1 font-semibold">
-              Book Chapter Location
+          <div className="md:col-span-2">
+            <label className="block text-xs uppercase tracking-wider text-[#C9A05C] mb-1 font-semibold">
+              Image URL * (Google Drive link or direct image link)
             </label>
-            <select
-              value={chapterId}
-              onChange={(e) => setChapterId(Number(e.target.value))}
-              className="w-full px-3.5 py-2.5 bg-[#220a12] border border-[rgba(201,164,99,0.3)] rounded-lg text-sm text-[#f2e8d5] focus:outline-none focus:border-[#c9a463] transition-colors"
-            >
-              {chapters.map((ch) => (
-                <option key={ch.id} value={ch.id}>
-                  Ch 0{ch.chapterNumber}: {ch.title}
-                </option>
-              ))}
-            </select>
+            <input
+              type="text"
+              required
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
+              placeholder="https://drive.google.com/file/d/... OR https://images.unsplash.com/..."
+              className="w-full px-3.5 py-2.5 bg-[#0D0B08] border border-[#C9A05C]/30 rounded-lg text-sm text-[#F5EFE1] placeholder:text-[#F5EFE1]/30 focus:outline-none focus:border-[#C9A05C] transition-colors font-mono text-xs"
+            />
           </div>
 
-          <div className="sm:col-span-2 lg:col-span-3">
-            <label className="block text-xs uppercase tracking-wider text-[#c9a463] mb-1 font-semibold">
-              Image URL / Google Drive Share Link *
-            </label>
-            <div className="relative">
-              <input
-                type="text"
-                required
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                placeholder="https://drive.google.com/file/d/... OR https://images.unsplash.com/..."
-                className="w-full pl-10 pr-3.5 py-2.5 bg-[#220a12] border border-[rgba(201,164,99,0.3)] rounded-lg text-sm text-[#f2e8d5] placeholder:text-[rgba(242,232,213,0.3)] focus:outline-none focus:border-[#c9a463] transition-colors"
-              />
-              <HardDrive className="w-4 h-4 text-[#c9a463] absolute left-3.5 top-3" />
-            </div>
-            <p className="text-[11px] text-[rgba(201,164,99,0.7)] mt-1">
-              Supports direct URLs and public Google Drive view/share links.
-            </p>
-          </div>
-
-          <div>
-            <label className="block text-xs uppercase tracking-wider text-[#c9a463] mb-1 font-semibold">
-              Short Caption
+          <div className="md:col-span-2">
+            <label className="block text-xs uppercase tracking-wider text-[#C9A05C] mb-1 font-semibold">
+              Short Description (Italic in public lightbox / card)
             </label>
             <input
               type="text"
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
-              placeholder="e.g. “An afternoon we'll never forget.”"
-              className="w-full px-3.5 py-2.5 bg-[#220a12] border border-[rgba(201,164,99,0.3)] rounded-lg text-sm text-[#f2e8d5] placeholder:text-[rgba(242,232,213,0.3)] focus:outline-none focus:border-[#c9a463] transition-colors"
+              placeholder="e.g. Early morning floral foyer before the arrival of our mentors."
+              className="w-full px-3.5 py-2.5 bg-[#0D0B08] border border-[#C9A05C]/30 rounded-lg text-sm text-[#F5EFE1] placeholder:text-[#F5EFE1]/30 focus:outline-none focus:border-[#C9A05C] transition-colors italic"
             />
-          </div>
-
-          <div>
-            <label className="block text-xs uppercase tracking-wider text-[#c9a463] mb-1 font-semibold">
-              Date / Timestamp
-            </label>
-            <input
-              type="text"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              placeholder="e.g. September 4, 2026 • 05:00 PM"
-              className="w-full px-3.5 py-2.5 bg-[#220a12] border border-[rgba(201,164,99,0.3)] rounded-lg text-sm text-[#f2e8d5] placeholder:text-[rgba(242,232,213,0.3)] focus:outline-none focus:border-[#c9a463] transition-colors"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs uppercase tracking-wider text-[#c9a463] mb-1 font-semibold">
-              Location / Hall
-            </label>
-            <input
-              type="text"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              placeholder="e.g. Main Auditorium, Block C"
-              className="w-full px-3.5 py-2.5 bg-[#220a12] border border-[rgba(201,164,99,0.3)] rounded-lg text-sm text-[#f2e8d5] placeholder:text-[rgba(242,232,213,0.3)] focus:outline-none focus:border-[#c9a463] transition-colors"
-            />
-          </div>
-
-          <div className="sm:col-span-2">
-            <label className="block text-xs uppercase tracking-wider text-[#c9a463] mb-1 font-semibold">
-              Detailed Description
-            </label>
-            <input
-              type="text"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="e.g. Four years of CSE Section-D coming together in gratitude and lifelong brotherhood."
-              className="w-full px-3.5 py-2.5 bg-[#220a12] border border-[rgba(201,164,99,0.3)] rounded-lg text-sm text-[#f2e8d5] placeholder:text-[rgba(242,232,213,0.3)] focus:outline-none focus:border-[#c9a463] transition-colors"
-            />
-          </div>
-
-          <div className="flex items-center space-x-6 pt-2 sm:col-span-2 lg:col-span-3">
-            <label className="flex items-center space-x-2 text-sm text-[#f2e8d5] cursor-pointer">
-              <input
-                type="checkbox"
-                checked={isFeatured}
-                onChange={(e) => setIsFeatured(e.target.checked)}
-                className="rounded border-[rgba(201,164,99,0.4)] text-[#c9a463] focus:ring-0 bg-[#220a12]"
-              />
-              <span className="flex items-center space-x-1">
-                <Star className="w-3.5 h-3.5 text-[#c9a463]" />
-                <span>Featured in Primary 3D Carousel</span>
-              </span>
-            </label>
           </div>
         </div>
 
-        <div className="flex items-center space-x-3 pt-2">
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="px-6 py-2.5 bg-gradient-to-r from-[#c9a463] to-[#b88d48] text-[#0e0407] font-bold text-xs uppercase tracking-wider rounded-lg hover:brightness-110 transition-all shadow-[0_2px_12px_rgba(201,164,99,0.25)] flex items-center space-x-2"
-          >
-            <Check className="w-4 h-4" />
-            <span>{isSubmitting ? 'Saving...' : editingId ? 'Update Photo' : 'Save & Publish Photo'}</span>
-          </button>
+        <div className="flex items-center space-x-6 pt-2">
+          <label className="flex items-center space-x-2 text-xs text-[#F5EFE1] cursor-pointer">
+            <input
+              type="checkbox"
+              checked={isFeatured}
+              onChange={(e) => setIsFeatured(e.target.checked)}
+              className="rounded accent-[#C9A05C] w-4 h-4"
+            />
+            <span>Featured in Bento Grid (Large Cell)</span>
+          </label>
+        </div>
+
+        <div className="flex justify-end space-x-3 pt-2">
           {editingId && (
             <button
               type="button"
               onClick={resetForm}
-              className="px-4 py-2.5 bg-[#220a12] border border-[rgba(201,164,99,0.3)] text-[#f2e8d5] text-xs uppercase tracking-wider rounded-lg hover:bg-[#320f18] transition-colors"
+              className="px-4 py-2 rounded-lg border border-[#C9A05C]/30 text-xs text-[#F5EFE1]/80 hover:bg-[#1E1B15]"
             >
               Cancel
             </button>
           )}
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="inline-flex items-center space-x-2 px-6 py-2.5 bg-[#C9A05C] hover:bg-[#D4AF6A] text-[#0D0B08] font-bold text-xs uppercase tracking-wider rounded-lg transition-all shadow-md disabled:opacity-50"
+          >
+            {isSubmitting ? (
+              <>
+                <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                <span>Saving Photo...</span>
+              </>
+            ) : (
+              <>
+                {editingId ? <Check className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
+                <span>{editingId ? 'Update Photo' : 'Add Photo'}</span>
+              </>
+            )}
+          </button>
         </div>
       </form>
 
-      {/* Existing Photo List Grid */}
-      <div>
-        <h4 className="font-serif text-base font-bold text-[#c9a463] mb-3">
-          Manage Photos ({photos.length} Live Items)
-        </h4>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {photos.map((photo) => (
-            <div
-              key={photo.id}
-              className={`bg-[#16060b] border ${
-                editingId === photo.id ? 'border-[#e2c27e] shadow-[0_0_15px_rgba(201,164,99,0.3)]' : 'border-[rgba(201,164,99,0.22)]'
-              } p-3 rounded-xl flex space-x-3 items-center hover:border-[rgba(201,164,99,0.45)] transition-all shadow-md`}
-            >
+      {/* Existing Photos Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {photos.map((photo) => (
+          <div
+            key={photo.id}
+            className="bg-[#16130E] border border-[#C9A05C]/20 rounded-xl overflow-hidden group hover:border-[#C9A05C]/50 transition-colors flex flex-col justify-between"
+          >
+            <div className="aspect-[4/3] bg-black relative overflow-hidden">
               <img
                 src={photo.imageUrl}
                 alt={photo.title}
-                className="w-16 h-16 object-cover rounded-lg bg-[#220912] flex-shrink-0 border border-[rgba(201,164,99,0.2)]"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                onError={(e) => ((e.target as HTMLElement).style.display = 'none')}
               />
-              <div className="flex-1 min-w-0">
-                <h4 className="font-serif text-sm font-bold text-[#f2e8d5] truncate">
+              <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/70 backdrop-blur-sm text-[10px] uppercase font-bold text-[#C9A05C] tracking-wider">
+                {photo.category || 'MEMORIES'}
+              </div>
+              {photo.isFeatured && (
+                <div className="absolute top-2 right-2 p-1 rounded-full bg-[#C9A05C] text-[#0D0B08]">
+                  <Star className="w-3 h-3 fill-current" />
+                </div>
+              )}
+            </div>
+
+            <div className="p-3.5 flex-1 flex flex-col justify-between space-y-2">
+              <div>
+                <h4 className="font-serif font-bold text-sm text-[#F5EFE1] truncate">
                   {photo.title}
                 </h4>
-                <div className="flex items-center space-x-2 text-[10px] text-[rgba(201,164,99,0.8)] mt-0.5">
-                  <span className="px-1.5 py-0.5 rounded bg-[rgba(201,164,99,0.12)] font-semibold uppercase">
-                    {photo.category || 'MEMORIES'}
-                  </span>
-                  {photo.likes ? <span>♥ {photo.likes}</span> : null}
-                </div>
                 {photo.caption && (
-                  <p className="text-[11px] text-[rgba(242,232,213,0.5)] truncate mt-0.5 italic">
-                    "{photo.caption}"
+                  <p className="text-xs text-[#F5EFE1]/70 italic truncate mt-0.5">
+                    {photo.caption}
                   </p>
                 )}
               </div>
-              <div className="flex flex-col space-y-1">
-                <button
-                  onClick={() => startEdit(photo)}
-                  className="p-1.5 text-[#c9a463] hover:text-[#e2c27e] hover:bg-[#2a0e18] rounded-lg transition-colors"
-                  title="Edit Photo"
-                >
-                  <Edit3 className="w-3.5 h-3.5" />
-                </button>
-                <button
-                  onClick={() => handleDelete(photo.id)}
-                  className="p-1.5 text-red-400 hover:text-red-300 hover:bg-[#320f18] rounded-lg transition-colors"
-                  title="Delete Photo"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
+
+              <div className="flex items-center justify-between pt-2 border-t border-[#C9A05C]/10 text-xs text-[#F5EFE1]/60">
+                <span>{photo.likes || 0} likes</span>
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => startEdit(photo)}
+                    className="p-1.5 rounded hover:bg-[#C9A05C]/20 text-[#C9A05C] transition-colors"
+                    title="Edit Photo"
+                  >
+                    <Edit3 className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(photo.id, photo.title)}
+                    className="p-1.5 rounded hover:bg-rose-950/40 text-rose-400 transition-colors"
+                    title="Delete Photo"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </div>
   );

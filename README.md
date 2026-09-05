@@ -1,127 +1,79 @@
-# Teachers' Day 2026 — Interactive Digital Memory Book
+<!--
+REQUIRED VERCEL ENVIRONMENT VARIABLES:
+- JWT_SECRET: Secret string used to sign and verify admin authentication JWT cookies.
+- GITHUB_TOKEN: Fine-grained Personal Access Token (PAT) with Read & Write permissions for contents of QuantumSenpai/hall-of-fame-sec-d-cse-2026.
+- GITHUB_OWNER: GitHub account or organization name (optional, defaults to "QuantumSenpai").
+- GITHUB_REPO: GitHub repository name (optional, defaults to "hall-of-fame-sec-d-cse-2026").
+- GITHUB_BRANCH: Target branch for content commits (optional, defaults to "main").
+- ADMIN_USERNAME: Username for admin CMS login (defaults to "admin").
+- ADMIN_PASSWORD_HASH: Bcrypt hash of the admin password for secure authentication.
+- REACTBITS_LICENSE_KEY: React Bits Pro license key for registry component access.
+- KV_REST_API_URL: Vercel KV REST API URL for Redis rate limiting and pending memory queue.
+- KV_REST_API_TOKEN: Vercel KV REST API authorization token.
+-->
 
-An interactive, cinematic, premium digital memory book web application engineered to let visitors relive the Teachers' Day 2026 celebration of Computer Science & Engineering Section D.
+# Teachers' Day 2026 — Bento-Grid Digital Memory Book
 
-The central visual element is a **3D Physical-Looking Vintage Book** with scroll-driven opening, page-flipping, stage zooming, and dynamic media storytelling.
+A simplified, ultra-premium digital memory book web application engineered to let visitors relive the Teachers' Day 2026 celebration of Computer Science & Engineering Section D.
+
+Featuring a responsive Bento Grid gallery, an illustrated static open-book hero with a one-time mount animation, React Bits Pro animated components, and a serverless architecture deployed on Vercel without external databases.
 
 ---
 
 ## 🌟 Visual Identity & Color Palette
 
-- **Warm Ivory**: `#EFE6CA`
+- **Warm Ivory / Cream**: `#EFE6CA`
 - **Antique Gold**: `#B9905A`
 - **Terracotta**: `#B95F46`
-- **Muted Blue**: `#44636A`
-- **Charcoal**: `#292D2B`
-- **Typography**: High contrast editorial serif (`Cormorant Garamond` / `Bodoni Moda`) paired with clean modern sans-serif (`Inter`) and handwritten script (`Caveat`).
+- **Slate Teal**: `#44636A`
+- **Charcoal**: `#292D2B` / `#141615`
+- **Typography**: High contrast editorial serif (`Cormorant Garamond`) paired with clean modern sans-serif (`Inter`) and accent handwritten script (`Caveat`).
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Architecture & Tech Stack
 
 - **Frontend**: React 18, TypeScript, Vite, Tailwind CSS, Framer Motion, Lucide React icons.
-- **Backend API**: Node.js, Express, TypeScript, JWT Authentication.
-- **Database**: Neon PostgreSQL with Drizzle ORM.
-- **Media System**: YouTube Embed & Shorts parser, Google Drive direct stream link normalizer.
-- **Admin CMS**: Protected management dashboard with moderation queue for public memory submissions.
+- **Components**: 
+  - `HeroBook`: Illustrated open book with parchment texture, spine shadow, and 1s mount entrance.
+  - `BentoGallery`: Mixed cell sizes (2x2, 1x2, 1x1), skeleton loaders, photo Lightbox modal, and embedded YouTube modal player.
+  - `LetterSwap`: React Bits Pro 3D Letter Swap per-letter staggered text animation.
+  - `SkewedCarousel`: React Bits Pro horizontal cards with 3D tilt and perspective scaling.
+  - `BackToTop`: Smooth scrolling to top after hero.
+- **Serverless Backend (`/api`)**: Vercel Serverless Functions.
+- **Data Store**:
+  - `content/site-content.json`: Single structured JSON file holding chapters, photos, videos, teachers, memories, people, and links.
+  - Admin PUT/POST endpoints commit edits directly back to GitHub using the GitHub REST Contents API (`GITHUB_TOKEN`), triggering automatic Vercel redeployment.
+  - `api/content.ts` fetches fresh data from GitHub Raw Content API with live KV likes merge.
+- **Vercel KV (`@vercel/kv`)**:
+  - **Photo Likes**: Real-time atomic counter (`photo:{id}:likes`), never writing to `site-content.json`.
+  - **Pending Memory Queue**: Stores unmoderated public memory submissions until approved by an admin.
+  - **Rate Limiting**: IP-based rate limiting on Admin Login (5/15m), Memory submissions (3/10m), and Photo likes (20/1m).
+- **Security**:
+  - `httpOnly`, `Secure`, `SameSite=Strict` cookie for JWT authentication (no localStorage tokens).
+  - Public text sanitization against stored XSS.
+  - Strict Content-Security-Policy in `vercel.json` allowlisting YouTube iframes and Google Drive images.
+  - `noindex, nofollow` on `/admin` route.
 
 ---
 
-## 📁 Folder Structure
+## 🚀 Getting Started Locally
 
-```
-.
-├── ARCHITECTURE.md                  # Detailed system architecture design doc
-├── .env.example                     # Environment variables template
-├── package.json                     # Root scripts and unified dependencies
-├── vite.config.ts                   # Vite frontend & API proxy config
-├── tailwind.config.js               # Color tokens & typography configuration
-├── drizzle.config.ts                # Drizzle ORM migration configuration
-│
-├── server/                          # Express Backend API & Services
-│   ├── index.ts                     # Server entry point
-│   ├── db/                          # Database connection & schema definitions
-│   │   ├── index.ts                 # Neon PostgreSQL client initializer
-│   │   ├── schema.ts                # Drizzle tables & TypeScript types
-│   │   └── seed.ts                  # Database seeding script
-│   ├── middleware/                  # Auth JWT validation
-│   ├── routes/                      # REST API endpoint handlers
-│   └── services/                    # Media link transformers & memory store
-│
-└── src/                             # React Frontend Application
-    ├── main.tsx                     # React DOM entry
-    ├── App.tsx                      # Root component & page router
-    ├── index.css                    # 3D perspective & vintage paper textures
-    ├── types/                       # Shared entity interfaces
-    ├── lib/                         # API fetch wrapper
-    ├── book/                        # 3D Vintage Book engine & scroll controller
-    ├── components/                  # Scrapbook UI, Polaroid stack, film strip, cards
-    └── admin/                       # Admin CMS Dashboard & moderation queue
-```
-
----
-
-## 🚀 Quick Setup & Local Development
-
-### 1. Install Dependencies
 ```bash
+# 1. Install dependencies
 npm install
-```
 
-### 2. Environment Configuration
-Copy `.env.example` to `.env`:
-```bash
-cp .env.example .env
-```
-
-Default local `.env`:
-```env
-PORT=5000
-NODE_ENV=development
-JWT_SECRET=teachers_day_2026_super_secret_jwt_key
-ADMIN_USERNAME=admin
-ADMIN_PASSWORD=teachersday2026
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/teachers_day_db
-```
-
-### 3. Run Development Server
-```bash
+# 2. Run local development environment
 npm run dev
 ```
-- Frontend: `http://localhost:3000`
-- Backend API: `http://localhost:5000`
+
+Visit [http://localhost:3000](http://localhost:3000) to view the application.
 
 ---
 
-## 🔐 Admin CMS & Moderation
+## 🔐 Admin CMS
 
-- Access Admin Login via the shield icon in the navigation header or directly through the app.
-- **Default Admin Credentials**:
-  - Username: `admin`
-  - Password: `teachersday2026`
-- **CMS Capabilities**:
-  - Manage Photos (supports direct Google Drive share links).
-  - Manage YouTube Videos (supports standard links, watch URLs & Shorts).
-  - Manage Faculty Messages & Profiles.
-  - Manage Book Chapters and presentation layouts.
-  - Approve or Reject student memory submissions.
-
----
-
-## 🏗️ Production Build
-
-To test production build compilation:
-```bash
-npm run build
-```
-
-To run production server:
-```bash
-NODE_ENV=production node dist/server/index.js
-```
-
----
-
-## ❤️ Dedication
-
-Made with love by the students of Computer Science & Engineering — Section D (Class of 2026) for our guiding lights.
+- Navigate to `/admin` or click the Shield icon in the navigation bar.
+- Default credentials (configured via environment):
+  - **Username**: `admin`
+  - **Password**: `teachersday2026`

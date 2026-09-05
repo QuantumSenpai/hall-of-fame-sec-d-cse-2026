@@ -1,5 +1,5 @@
 import React from 'react';
-import { Teacher } from '../types/index.ts';
+import type { Teacher } from '../types/index.ts';
 import { Quote, ExternalLink as LinkIcon } from 'lucide-react';
 
 interface TeacherCardProps {
@@ -8,58 +8,66 @@ interface TeacherCardProps {
 
 export const TeacherCard: React.FC<TeacherCardProps> = ({ teacher }) => {
   return (
-    <div className="relative bg-gradient-to-br from-[#f8f0de] via-[#ede0c7] to-[#e6d5b8] text-[#2c180e] rounded-xl p-6 sm:p-8 shadow-[0_14px_40px_rgba(0,0,0,0.6)] border border-[rgba(160,121,58,0.45)] flex flex-col sm:flex-row gap-6 items-center sm:items-start group transition-all duration-300 hover:shadow-2xl hover:border-[#c9a463]">
-      {/* Decorative Vintage Stamp Accent */}
-      <div className="absolute top-3 right-4 w-12 h-14 border border-dashed border-[#8b2525] p-1 flex flex-col items-center justify-center opacity-70 group-hover:opacity-100 transition-opacity">
-        <span className="text-[9px] font-serif uppercase tracking-widest text-[#8b2525] font-bold">POSTAGE</span>
-        <span className="text-xs font-serif font-bold text-[#8b2525]">2026</span>
+    <div className="w-[320px] sm:w-[380px] bg-[#16130E] border border-[#C9A05C]/25 rounded-2xl p-6 sm:p-7 shadow-xl flex flex-col justify-between group transition-all duration-300 hover:border-[#C9A05C]/60 hover:shadow-2xl">
+      {/* Decorative Stamp Header */}
+      <div className="flex items-start justify-between gap-4 mb-4">
+        <div className="flex items-center space-x-3.5">
+          {teacher.photoUrl ? (
+            <div className="relative w-16 h-16 rounded-full border-2 border-[#C9A05C] overflow-hidden shadow-md flex-shrink-0 bg-[#0D0B08]">
+              <img
+                src={teacher.photoUrl}
+                alt={teacher.name}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+          ) : (
+            <div className="w-16 h-16 rounded-full border-2 border-[#C9A05C] bg-[#1E1B15] text-[#C9A05C] flex items-center justify-center font-serif text-2xl font-bold flex-shrink-0 shadow-md">
+              {teacher.name.charAt(0)}
+            </div>
+          )}
+
+          <div>
+            <h3 className="font-serif text-xl font-bold text-[#F5EFE1] leading-tight">
+              {teacher.name}
+            </h3>
+            <p className="font-sans text-[11px] text-[#C9A05C] uppercase tracking-wider font-semibold mt-0.5">
+              {teacher.department}
+            </p>
+          </div>
+        </div>
+
+        {/* Vintage Postal Badge */}
+        <div className="border border-dashed border-[#5C1F2E]/80 bg-[#5C1F2E]/10 rounded px-2 py-1 flex flex-col items-center justify-center opacity-85 group-hover:opacity-100 transition-opacity">
+          <span className="text-[8px] font-sans uppercase tracking-widest text-[#5C1F2E] font-bold">HONOR</span>
+          <span className="text-[10px] font-serif font-bold text-[#5C1F2E]">2026</span>
+        </div>
       </div>
 
-      {/* Teacher Photo */}
-      {teacher.photoUrl ? (
-        <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-full border-4 border-[#c9a463] overflow-hidden shadow-lg flex-shrink-0">
-          <img
-            src={teacher.photoUrl}
-            alt={teacher.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
-        </div>
-      ) : (
-        <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-full border-4 border-[#c9a463] bg-[#220912] text-[#c9a463] flex items-center justify-center font-serif text-3xl font-bold flex-shrink-0 shadow-md">
-          {teacher.name.charAt(0)}
-        </div>
-      )}
+      {/* Quote Message Body */}
+      <div className="relative my-3 flex-1">
+        <Quote className="w-6 h-6 text-[#C9A05C]/35 absolute -top-1 -left-2 pointer-events-none" />
+        <p className="font-serif italic text-base text-[#F5EFE1] leading-relaxed pl-3.5 relative z-10">
+          "{teacher.message}"
+        </p>
+      </div>
 
-      {/* Message Content */}
-      <div className="flex-1 text-center sm:text-left space-y-3">
-        <div>
-          <h3 className="font-serif text-2xl font-bold text-[#2c180e]">
-            {teacher.name}
-          </h3>
-          <p className="font-sans text-xs text-[#8b2525] uppercase tracking-wider font-semibold">
-            {teacher.department}
-          </p>
-        </div>
-
-        <div className="relative pt-2">
-          <Quote className="w-6 h-6 text-[#c9a463]/50 absolute -top-2 -left-3" />
-          <p className="font-serif italic text-base sm:text-lg text-[#3d2417] leading-relaxed relative z-10 pl-2">
-            "{teacher.message}"
-          </p>
-        </div>
-
-        {teacher.profileLink && (
+      {/* Footer Profile Link */}
+      {teacher.profileLink && (
+        <div className="pt-4 mt-2 border-t border-[#C9A05C]/15 flex items-center justify-between">
           <a
             href={teacher.profileLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center space-x-1.5 text-xs text-[#7a4818] hover:text-[#8b2525] font-semibold transition-colors"
+            className="inline-flex items-center space-x-1.5 text-xs text-[#C9A05C] hover:text-[#D4AF6A] font-semibold transition-colors"
           >
             <span>Faculty Profile</span>
             <LinkIcon className="w-3.5 h-3.5" />
           </a>
-        )}
-      </div>
+          <span className="text-[10px] text-[#F5EFE1]/40 font-sans tracking-widest uppercase">
+            CSE Faculty
+          </span>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,0 +1,241 @@
+{
+  "hero": {
+    "badgeText": "Dedicated to Our Mentors • CSE Sec-D 2026",
+    "titleLine1": "TEACHERS' DAY",
+    "titleLine2": "2026 DIGITAL",
+    "titleLine3": "MEMORY BOOK",
+    "subtitle": "Every lesson taught, every question answered, every encouraging word shared — captured and preserved in gratitude by the students of Computer Science & Engineering Section-D.",
+    "bookImage": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+    "bookCaption": "A moment of stillness & infinite gratitude",
+    "quoteHeading": "Good Teachers\nBrighter Futures",
+    "quoteSubtext": "More than teachers, A family forever."
+  },
+  "photos": [
+    {
+      "id": 1,
+      "category": "OUR STORY",
+      "title": "A Frozen Moment",
+      "caption": "Early morning floral foyer before the arrival of our mentors.",
+      "imageUrl": "https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=1200&q=80",
+      "likes": 42,
+      "isFeatured": true,
+      "displayOrder": 1,
+      "createdAt": "2026-09-04T07:15:00Z"
+    },
+    {
+      "id": 2,
+      "category": "GREAT MOMENTS",
+      "title": "The Golden Flame",
+      "caption": "Inaugurating the celebration with the ceremonial brass lamp.",
+      "imageUrl": "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=1200&q=80",
+      "likes": 88,
+      "isFeatured": true,
+      "displayOrder": 2,
+      "createdAt": "2026-09-04T09:30:00Z"
+    },
+    {
+      "id": 3,
+      "category": "TEACHERS",
+      "title": "Guiding Lights",
+      "caption": "Beloved faculty members sharing rare candid smiles on stage.",
+      "imageUrl": "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1200&q=80",
+      "likes": 135,
+      "isFeatured": true,
+      "displayOrder": 3,
+      "createdAt": "2026-09-04T10:45:00Z"
+    },
+    {
+      "id": 4,
+      "category": "STUDENTS",
+      "title": "Behind The Curtains",
+      "caption": "Section-D volunteers coordinating technical lighting and audio.",
+      "imageUrl": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80",
+      "likes": 64,
+      "isFeatured": true,
+      "displayOrder": 4,
+      "createdAt": "2026-09-04T11:20:00Z"
+    },
+    {
+      "id": 5,
+      "category": "ACTIVITIES",
+      "title": "Unscripted Joy",
+      "caption": "Laughter echoing across the hall during the surprise voice quiz.",
+      "imageUrl": "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=1200&q=80",
+      "likes": 92,
+      "isFeatured": true,
+      "displayOrder": 5,
+      "createdAt": "2026-09-04T13:15:00Z"
+    },
+    {
+      "id": 6,
+      "category": "GIFTS",
+      "title": "Handcrafted Honor",
+      "caption": "Custom sketched charcoal portraits presented with heartfelt notes.",
+      "imageUrl": "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&w=1200&q=80",
+      "likes": 110,
+      "isFeatured": true,
+      "displayOrder": 6,
+      "createdAt": "2026-09-04T14:45:00Z"
+    },
+    {
+      "id": 7,
+      "category": "CANDID",
+      "title": "Warm Reflections",
+      "caption": "Professors and students conversing together during lunch break.",
+      "imageUrl": "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=1200&q=80",
+      "likes": 176,
+      "isFeatured": true,
+      "displayOrder": 7,
+      "createdAt": "2026-09-04T15:30:00Z"
+    },
+    {
+      "id": 8,
+      "category": "MEMORIES",
+      "title": "Standing Ovation",
+      "caption": "Golden confetti showering the stage at the grand finale.",
+      "imageUrl": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=80",
+      "likes": 210,
+      "isFeatured": true,
+      "displayOrder": 8,
+      "createdAt": "2026-09-04T17:00:00Z"
+    },
+    {
+      "id": 9,
+      "category": "BEHIND THE SCENES",
+      "title": "The Editing Suite",
+      "caption": "Sorting through hours of footage to immortalize the celebration.",
+      "imageUrl": "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1200&q=80",
+      "likes": 95,
+      "isFeatured": true,
+      "displayOrder": 9,
+      "createdAt": "2026-09-04T23:45:00Z"
+    }
+  ],
+  "videos": [
+    {
+      "id": 1,
+      "title": "Official Celebration Highlight Reel",
+      "description": "A cinematic tribute capturing the essence and emotion of Teachers' Day 2026.",
+      "youtubeUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "youtubeId": "dQw4w9WgXcQ",
+      "thumbnailUrl": "https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg",
+      "isFeatured": true,
+      "displayOrder": 1,
+      "createdAt": "2026-09-04T15:10:00Z"
+    },
+    {
+      "id": 2,
+      "title": "Surprise Flashmob & Dance Tribute",
+      "description": "Section-D students energetic retro performance dedicated to our professors.",
+      "youtubeUrl": "https://www.youtube.com/watch?v=L_LUpnjgPso",
+      "youtubeId": "L_LUpnjgPso",
+      "thumbnailUrl": "https://img.youtube.com/vi/L_LUpnjgPso/hqdefault.jpg",
+      "isFeatured": true,
+      "displayOrder": 2,
+      "createdAt": "2026-09-04T15:30:00Z"
+    }
+  ],
+  "teachers": [
+    {
+      "id": 1,
+      "name": "Dr. Aris Thorne",
+      "department": "Computer Science & Engineering",
+      "photoUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80",
+      "message": "To my dear Sec-D students: teaching you algorithms and systems has been an absolute privilege. Always remain curious, solve problems with empathy, and never stop learning.",
+      "profileLink": "https://linkedin.com",
+      "isFeatured": true,
+      "displayOrder": 1
+    },
+    {
+      "id": 2,
+      "name": "Prof. Elena Rostova",
+      "department": "Data Structures & AI",
+      "photoUrl": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80",
+      "message": "Thank you for putting together such a magical, thoughtful Teachers' Day. Seeing your dedication today makes me confident that the future of technology is in wonderful hands.",
+      "profileLink": "https://linkedin.com",
+      "isFeatured": true,
+      "displayOrder": 2
+    },
+    {
+      "id": 3,
+      "name": "Prof. Marcus Vance",
+      "department": "Software Engineering & Architecture",
+      "photoUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80",
+      "message": "The handwritten notes and custom Memory Book are treasures I will keep forever. Keep striving for excellence, Sec-D!",
+      "profileLink": null,
+      "isFeatured": true,
+      "displayOrder": 3
+    }
+  ],
+  "people": [
+    {
+      "id": 1,
+      "name": "Vikramaditya Sen",
+      "role": "Lead Event Organizer",
+      "photoUrl": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=400&q=80",
+      "bio": "Managed stage logistics, invitations, and schedule flow.",
+      "displayOrder": 1
+    },
+    {
+      "id": 2,
+      "name": "Ananya Roy",
+      "role": "Media & Photography Lead",
+      "photoUrl": "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80",
+      "bio": "Head of video production, photo edits, and digital memory book curation.",
+      "displayOrder": 2
+    },
+    {
+      "id": 3,
+      "name": "Karan Mehta",
+      "role": "Stage & Decoration Coordinator",
+      "photoUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80",
+      "bio": "Curated floral arrangements, lighting setup, and vintage aesthetics.",
+      "displayOrder": 3
+    }
+  ],
+  "apology": {
+    "label": "ONE LAST PAGE",
+    "title": "From Our Hearts",
+    "paragraphs": [
+      "We tried to preserve every smile, every laugh, and every little moment that made this Teachers' Day so special to all of us.",
+      "If something doesn't work perfectly or if we missed a detail, we sincerely apologize. We may not have captured every single angle, but we gave this tribute our absolute best."
+    ],
+    "signature": "TEACHERS' DAY 2026",
+    "subSignature": "Made with love by CSE Sec-D Students"
+  },
+  "memories": [
+    {
+      "id": 1,
+      "authorName": "Aarav Sharma",
+      "authorRole": "Student, Sec-D CSE",
+      "message": "Prof. Elena's lecture on neural networks changed how I view computer science forever. Happy Teachers' Day to the absolute best faculty!",
+      "imageUrl": null,
+      "category": "gratitude",
+      "status": "approved",
+      "isFeatured": true,
+      "createdAt": "2026-09-04T14:00:00Z"
+    },
+    {
+      "id": 2,
+      "authorName": "Riya Patel",
+      "authorRole": "Student, Sec-D CSE",
+      "message": "Dr. Thorne's patience during final project reviews was legendary. Thank you for guiding us through every bug and concept!",
+      "imageUrl": null,
+      "category": "funny",
+      "status": "approved",
+      "isFeatured": true,
+      "createdAt": "2026-09-04T14:30:00Z"
+    },
+    {
+      "id": 3,
+      "authorName": "Devansh Roy",
+      "authorRole": "Student, Sec-D CSE",
+      "message": "Section D wouldn't be Section D without Prof. Marcus's architecture drills. We are who we are because of your relentless encouragement.",
+      "imageUrl": null,
+      "category": "gratitude",
+      "status": "approved",
+      "isFeatured": true,
+      "createdAt": "2026-09-04T15:00:00Z"
+    }
+  ]
+}

@@ -1,59 +1,62 @@
 import React from 'react';
-import { Chapter, Photo, Video, Teacher, StudentMemory, ExternalLink, Person } from '../types/index.ts';
-import { Image, Video as VideoIcon, BookOpen, UserCheck, MessageSquare, Link, Users, PlusCircle } from 'lucide-react';
+import { Photo, Video, Teacher, StudentMemory, Person } from '../types/index.ts';
+import { Image, Film, UserCheck, MessageSquare, Users, PlusCircle, Sparkles, Heart } from 'lucide-react';
 
 interface DashboardOverviewProps {
-  chapters: Chapter[];
   photos: Photo[];
   videos: Video[];
   teachers: Teacher[];
   memories: StudentMemory[];
-  links: ExternalLink[];
   people: Person[];
   onSelectTab: (tab: string) => void;
 }
 
 export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
-  chapters,
   photos,
   videos,
   teachers,
   memories,
-  links,
   people,
   onSelectTab,
 }) => {
   const pendingMemories = memories.filter((m) => m.status === 'pending');
 
   const stats = [
-    { label: 'Total Chapters', count: chapters.length, icon: BookOpen, color: 'text-[#e2c27e]', tab: 'chapters' },
-    { label: 'Photos Managed', count: photos.length, icon: Image, color: 'text-[#c9a463]', tab: 'photos' },
-    { label: 'Videos Hosted', count: videos.length, icon: VideoIcon, color: 'text-[#df8f70]', tab: 'videos' },
-    { label: 'Faculty Messages', count: teachers.length, icon: UserCheck, color: 'text-[#d4af77]', tab: 'teachers' },
-    { label: 'Pending Submissions', count: pendingMemories.length, icon: MessageSquare, color: 'text-[#e69f88]', tab: 'memories' },
-    { label: 'External Links', count: links.length, icon: Link, color: 'text-[#c9a463]', tab: 'links' },
-    { label: 'Team Contributors', count: people.length, icon: Users, color: 'text-[#e2c27e]', tab: 'people' },
+    { label: 'Photos Managed', count: photos.length, icon: Image, tab: 'photos' },
+    { label: 'Edits & Moments', count: videos.length, icon: Film, tab: 'videos' },
+    { label: 'Faculty Messages', count: teachers.length, icon: UserCheck, tab: 'teachers' },
+    { label: 'Management Team', count: people.length, icon: Users, tab: 'people' },
+    { label: 'Pending Submissions', count: pendingMemories.length, icon: MessageSquare, tab: 'memories', highlight: pendingMemories.length > 0 },
   ];
 
   return (
     <div className="space-y-8">
+      <div>
+        <h2 className="font-serif text-2xl font-bold text-[#F5EFE1]">System Overview</h2>
+        <p className="text-xs text-[#F5EFE1]/60 mt-1">
+          High-level metrics and quick actions for Teachers' Day 2026 digital memory site.
+        </p>
+      </div>
+
       {/* Overview Stat Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {stats.map((stat, idx) => {
           const IconComponent = stat.icon;
           return (
             <div
               key={idx}
               onClick={() => onSelectTab(stat.tab)}
-              className="bg-[#16060b] border border-[rgba(201,164,99,0.22)] p-5 rounded-xl hover:border-[#c9a463] transition-all cursor-pointer shadow-lg hover:shadow-[0_8px_25px_rgba(201,164,99,0.15)] group"
+              className={`bg-[#16130E] border p-5 rounded-xl transition-all cursor-pointer shadow-lg hover:shadow-[0_8px_25px_rgba(201,160,92,0.12)] group ${
+                stat.highlight ? 'border-[#5C1F2E] bg-[#5C1F2E]/10' : 'border-[#C9A05C]/20 hover:border-[#C9A05C]'
+              }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-[11px] uppercase tracking-wider text-[rgba(201,164,99,0.7)] font-semibold">
+                <span className="text-[11px] uppercase tracking-wider text-[#C9A05C]/80 font-semibold">
                   {stat.label}
                 </span>
-                <IconComponent className={`w-5 h-5 ${stat.color} group-hover:scale-110 group-hover:text-[#e2c27e] transition-transform`} />
+                <IconComponent className="w-5 h-5 text-[#C9A05C] group-hover:scale-110 transition-transform" />
               </div>
-              <p className="text-3xl font-bold font-serif text-[#f2e8d5] mt-2">
+              <p className="text-3xl font-bold font-serif text-[#F5EFE1] mt-2">
                 {stat.count}
               </p>
             </div>
@@ -62,45 +65,52 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
       </div>
 
       {/* Quick Action Buttons */}
-      <div className="bg-[#16060b] border border-[rgba(201,164,99,0.22)] p-6 rounded-xl space-y-4 shadow-xl">
-        <h3 className="font-serif text-lg font-bold text-[#f2e8d5] border-b border-[rgba(201,164,99,0.2)] pb-3">
+      <div className="bg-[#16130E] border border-[#C9A05C]/20 p-6 rounded-xl space-y-4 shadow-xl">
+        <h3 className="font-serif text-base font-bold text-[#F5EFE1] border-b border-[#C9A05C]/20 pb-3">
           Quick Management Actions
         </h3>
         <div className="flex flex-wrap gap-3">
           <button
+            onClick={() => onSelectTab('hero')}
+            className="inline-flex items-center space-x-2 px-4 py-2.5 bg-[#1E1B15] text-[#C9A05C] border border-[#C9A05C]/40 rounded-lg font-bold text-xs uppercase tracking-wider hover:bg-[#C9A05C] hover:text-[#0D0B08] transition-all"
+          >
+            <Sparkles className="w-4 h-4" />
+            <span>Edit Hero Content</span>
+          </button>
+          <button
             onClick={() => onSelectTab('photos')}
-            className="inline-flex items-center space-x-2 px-4 py-2.5 bg-gradient-to-r from-[#c9a463] to-[#b88d48] text-[#0e0407] rounded-lg font-bold text-xs uppercase tracking-wider hover:brightness-110 transition-all shadow-[0_2px_12px_rgba(201,164,99,0.25)]"
+            className="inline-flex items-center space-x-2 px-4 py-2.5 bg-[#C9A05C] text-[#0D0B08] rounded-lg font-bold text-xs uppercase tracking-wider hover:bg-[#D4AF6A] transition-all shadow-md"
           >
             <PlusCircle className="w-4 h-4" />
-            <span>Add Photo</span>
+            <span>Add Bento Photo</span>
           </button>
           <button
             onClick={() => onSelectTab('videos')}
-            className="inline-flex items-center space-x-2 px-4 py-2.5 bg-[#220a12] text-[#f2e8d5] border border-[rgba(201,164,99,0.3)] rounded-lg font-semibold text-xs hover:border-[#c9a463] hover:bg-[#2d0e19] transition-all"
+            className="inline-flex items-center space-x-2 px-4 py-2.5 bg-[#1E1B15] text-[#F5EFE1] border border-[#C9A05C]/30 rounded-lg font-semibold text-xs hover:border-[#C9A05C] transition-all"
           >
-            <PlusCircle className="w-4 h-4 text-[#c9a463]" />
-            <span>Add Video</span>
+            <PlusCircle className="w-4 h-4 text-[#C9A05C]" />
+            <span>Add Edit / Video</span>
           </button>
           <button
-            onClick={() => onSelectTab('chapters')}
-            className="inline-flex items-center space-x-2 px-4 py-2.5 bg-[#220a12] text-[#f2e8d5] border border-[rgba(201,164,99,0.3)] rounded-lg font-semibold text-xs hover:border-[#c9a463] hover:bg-[#2d0e19] transition-all"
+            onClick={() => onSelectTab('people')}
+            className="inline-flex items-center space-x-2 px-4 py-2.5 bg-[#1E1B15] text-[#F5EFE1] border border-[#C9A05C]/30 rounded-lg font-semibold text-xs hover:border-[#C9A05C] transition-all"
           >
-            <PlusCircle className="w-4 h-4 text-[#c9a463]" />
-            <span>Add Chapter</span>
+            <Users className="w-4 h-4 text-[#C9A05C]" />
+            <span>Management Team</span>
           </button>
           <button
-            onClick={() => onSelectTab('teachers')}
-            className="inline-flex items-center space-x-2 px-4 py-2.5 bg-[#220a12] text-[#f2e8d5] border border-[rgba(201,164,99,0.3)] rounded-lg font-semibold text-xs hover:border-[#c9a463] hover:bg-[#2d0e19] transition-all"
+            onClick={() => onSelectTab('apology')}
+            className="inline-flex items-center space-x-2 px-4 py-2.5 bg-[#1E1B15] text-[#F5EFE1] border border-[#C9A05C]/30 rounded-lg font-semibold text-xs hover:border-[#C9A05C] transition-all"
           >
-            <PlusCircle className="w-4 h-4 text-[#c9a463]" />
-            <span>Add Teacher Message</span>
+            <Heart className="w-4 h-4 text-[#5C1F2E]" />
+            <span>Thank You & Apology</span>
           </button>
           <button
             onClick={() => onSelectTab('memories')}
-            className="inline-flex items-center space-x-2 px-4 py-2.5 bg-[#852525] text-[#f2e8d5] rounded-lg font-semibold text-xs hover:bg-[#9a2b2b] transition-all shadow-[0_2px_12px_rgba(133,37,37,0.3)]"
+            className="inline-flex items-center space-x-2 px-4 py-2.5 bg-[#5C1F2E] text-[#F5EFE1] rounded-lg font-semibold text-xs hover:bg-[#722739] transition-all shadow-md"
           >
             <MessageSquare className="w-4 h-4" />
-            <span>View Submissions Queue ({pendingMemories.length})</span>
+            <span>Submissions Queue ({pendingMemories.length})</span>
           </button>
         </div>
       </div>

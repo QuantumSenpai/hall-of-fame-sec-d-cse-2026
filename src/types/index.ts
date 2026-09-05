@@ -1,49 +1,37 @@
-export interface Chapter {
-  id: number;
-  chapterNumber: number;
-  title: string;
-  subtitle?: string | null;
-  description?: string | null;
-  layoutType: 'editorial' | 'polaroid_stack' | 'video_theater' | 'torn_collage' | 'film_strip' | string;
-  coverImageUrl?: string | null;
-  status: 'draft' | 'published' | 'archived' | string;
-  displayOrder: number;
-  createdAt: string | Date;
+export interface HeroContent {
+  badgeText: string;
+  titleLine1: string;
+  titleLine2: string;
+  titleLine3: string;
+  subtitle: string;
+  bookImage: string;
+  bookCaption: string;
+  quoteHeading: string;
+  quoteSubtext: string;
 }
 
 export interface Photo {
   id: number;
-  chapterId?: number | null;
   title: string;
   caption?: string | null;
-  description?: string | null;
   imageUrl: string;
-  driveFileId?: string | null;
-  layoutStyle: 'polaroid' | 'torn_edge' | 'vintage_frame' | 'full_bleed' | string;
   category?: string | null;
-  date?: string | null;
-  location?: string | null;
-  uploadedBy?: string | null;
   likes?: number;
   isFeatured: boolean;
-  status: 'draft' | 'published' | 'archived' | string;
   displayOrder: number;
-  createdAt: string | Date;
+  createdAt: string;
 }
 
 export interface Video {
   id: number;
-  chapterId?: number | null;
   title: string;
   description?: string | null;
   youtubeUrl: string;
   youtubeId: string;
   thumbnailUrl?: string | null;
-  isShort: boolean;
   isFeatured: boolean;
-  status: 'draft' | 'published' | 'archived' | string;
-  displayOrder: number;
-  createdAt: string | Date;
+  displayOrder?: number;
+  createdAt?: string;
 }
 
 export interface Teacher {
@@ -53,11 +41,8 @@ export interface Teacher {
   photoUrl?: string | null;
   message: string;
   profileLink?: string | null;
-  videoUrl?: string | null;
   isFeatured: boolean;
-  status: 'draft' | 'published' | 'archived' | string;
   displayOrder: number;
-  createdAt: string | Date;
 }
 
 export interface StudentMemory {
@@ -69,28 +54,22 @@ export interface StudentMemory {
   category: string;
   status: 'pending' | 'approved' | 'rejected' | string;
   isFeatured: boolean;
-  createdAt: string | Date;
-}
-
-export interface ExternalLink {
-  id: number;
-  title: string;
-  description?: string | null;
-  platform: 'instagram' | 'youtube' | 'gdrive' | 'linkedin' | 'facebook' | 'other' | string;
-  url: string;
-  thumbnailUrl?: string | null;
-  isFeatured: boolean;
-  displayOrder: number;
-  createdAt: string | Date;
+  createdAt: string;
 }
 
 export interface Person {
   id: number;
   name: string;
   role: string;
-  team: 'lead' | 'media' | 'organizer' | 'volunteer' | string;
   photoUrl?: string | null;
   bio?: string | null;
   displayOrder: number;
-  createdAt: string | Date;
+}
+
+export interface ApologyContent {
+  label: string;
+  title: string;
+  paragraphs: string[];
+  signature: string;
+  subSignature: string;
 }
