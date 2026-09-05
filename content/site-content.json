@@ -4,7 +4,7 @@
     "titleLine1": "TEACHERS' DAY",
     "titleLine2": "2026 DIGITAL",
     "titleLine3": "MEMORY BOOK",
-    "subtitle": "Every lesson taught, every question answered, every encouraging word shared — captured and preserved in gratitude by the students of Computer Science & Engineering Section-D.",
+    "subtitle": "Every lesson taught, every question answered, every encouraging word shared captured and preserved in gratitude by the students of Computer Science & Engineering Section-D.",
     "bookImage": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
     "bookCaption": "A moment of stillness & infinite gratitude",
     "quoteHeading": "Good Teachers\nBrighter Futures",
@@ -113,6 +113,28 @@
   ],
   "videos": [
     {
+      "id": 1,
+      "title": "Official Celebration Highlight Reel",
+      "description": "A cinematic tribute capturing the essence and emotion of Teachers' Day 2026.",
+      "youtubeUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "youtubeId": "dQw4w9WgXcQ",
+      "thumbnailUrl": "https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg",
+      "isFeatured": true,
+      "displayOrder": 1,
+      "createdAt": "2026-09-04T15:10:00Z"
+    },
+    {
+      "id": 2,
+      "title": "Surprise Flashmob & Dance Tribute",
+      "description": "Section-D students energetic retro performance dedicated to our professors.",
+      "youtubeUrl": "https://www.youtube.com/watch?v=L_LUpnjgPso",
+      "youtubeId": "L_LUpnjgPso",
+      "thumbnailUrl": "https://img.youtube.com/vi/L_LUpnjgPso/hqdefault.jpg",
+      "isFeatured": true,
+      "displayOrder": 2,
+      "createdAt": "2026-09-04T15:30:00Z"
+    },
+    {
       "id": 1788608684519,
       "title": "Our Teacher, Our Melody ❤️ | Chawl Raastaye",
       "description": "Teachers Day 2026",
@@ -123,90 +145,6 @@
       "isFeatured": false,
       "displayOrder": 3,
       "createdAt": "2026-09-05T11:44:44.519Z"
-    },
-    {
-      "id": 1788608720889,
-      "title": "Our Teacher, Our Melody ❤️ | Chawl Raastaye",
-      "description": "Teachers Day 2026",
-      "youtubeUrl": "https://www.youtube.com/watch?v=DCxbnlTzu-w",
-      "youtubeId": "DCxbnlTzu-w",
-      "thumbnailUrl": "https://img.youtube.com/vi/DCxbnlTzu-w/hqdefault.jpg",
-      "isShort": false,
-      "isFeatured": false,
-      "displayOrder": 4,
-      "createdAt": "2026-09-05T11:45:20.889Z"
-    },
-    {
-      "id": 1788608744371,
-      "title": "She Chose to Teach Us ❤️ | Teachers’ Day 2026",
-      "description": "Teachers Day 2026",
-      "youtubeUrl": "https://www.youtube.com/watch?v=BGZGJsdM96Q",
-      "youtubeId": "BGZGJsdM96Q",
-      "thumbnailUrl": "https://img.youtube.com/vi/BGZGJsdM96Q/hqdefault.jpg",
-      "isShort": false,
-      "isFeatured": false,
-      "displayOrder": 5,
-      "createdAt": "2026-09-05T11:45:44.371Z"
-    },
-    {
-      "id": 1788608763963,
-      "title": "When Music Spoke Bengali ❤️ | Mayabono Biharini",
-      "description": "Teachers Day 2026",
-      "youtubeUrl": "https://www.youtube.com/watch?v=oGYFER1Ael4",
-      "youtubeId": "oGYFER1Ael4",
-      "thumbnailUrl": "https://img.youtube.com/vi/oGYFER1Ael4/hqdefault.jpg",
-      "isShort": false,
-      "isFeatured": false,
-      "displayOrder": 6,
-      "createdAt": "2026-09-05T11:46:03.963Z"
-    },
-    {
-      "id": 1788608787994,
-      "title": "Gulabi Aankhein 🎶 | Students’ Jam Session",
-      "description": "Teachers Day 2026",
-      "youtubeUrl": "https://www.youtube.com/watch?v=JoIad8wjeSA",
-      "youtubeId": "JoIad8wjeSA",
-      "thumbnailUrl": "https://img.youtube.com/vi/JoIad8wjeSA/hqdefault.jpg",
-      "isShort": false,
-      "isFeatured": false,
-      "displayOrder": 7,
-      "createdAt": "2026-09-05T11:46:27.994Z"
-    },
-    {
-      "id": 1788608809320,
-      "title": "From Planning to Celebration | Teachers’ Day 2026",
-      "description": "Teachers Day 2026",
-      "youtubeUrl": "https://www.youtube.com/watch?v=pHNgxqJc098",
-      "youtubeId": "pHNgxqJc098",
-      "thumbnailUrl": "https://img.youtube.com/vi/pHNgxqJc098/hqdefault.jpg",
-      "isShort": false,
-      "isFeatured": false,
-      "displayOrder": 8,
-      "createdAt": "2026-09-05T11:46:49.320Z"
-    },
-    {
-      "id": 1788608832900,
-      "title": "When Sir Lost the Guessing Game 😂🕶️",
-      "description": "Teachers Day 2026",
-      "youtubeUrl": "https://www.youtube.com/watch?v=Mn4inYisuhs",
-      "youtubeId": "Mn4inYisuhs",
-      "thumbnailUrl": "https://img.youtube.com/vi/Mn4inYisuhs/hqdefault.jpg",
-      "isShort": false,
-      "isFeatured": false,
-      "displayOrder": 9,
-      "createdAt": "2026-09-05T11:47:12.900Z"
-    },
-    {
-      "id": 1788608853010,
-      "title": "A Little Request, A Whole Lot of Music 🎶",
-      "description": "Teachers Day 2026",
-      "youtubeUrl": "https://www.youtube.com/watch?v=THBvi5HXVuU",
-      "youtubeId": "THBvi5HXVuU",
-      "thumbnailUrl": "https://img.youtube.com/vi/THBvi5HXVuU/hqdefault.jpg",
-      "isShort": false,
-      "isFeatured": false,
-      "displayOrder": 10,
-      "createdAt": "2026-09-05T11:47:33.010Z"
     }
   ],
   "teachers": [
