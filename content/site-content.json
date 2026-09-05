@@ -24,17 +24,6 @@
       "driveFileId": null
     },
     {
-      "id": 3,
-      "category": "TEACHERS",
-      "title": "Guiding Lights",
-      "caption": "Beloved faculty members sharing rare candid smiles on stage.",
-      "imageUrl": "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1200&q=80",
-      "likes": 135,
-      "isFeatured": true,
-      "displayOrder": 3,
-      "createdAt": "2026-09-04T10:45:00Z"
-    },
-    {
       "id": 4,
       "category": "STUDENTS",
       "title": "Behind The Curtains",
