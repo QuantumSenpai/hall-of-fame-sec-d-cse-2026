@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { verifyAdmin } from '../lib/auth.ts';
-import { getSiteContent, commitSiteContent } from '../lib/github.ts';
-import { checkMemorySubmitRateLimit } from '../lib/rateLimit.ts';
-import { pushPendingMemory, getPendingMemories, removePendingMemory } from '../lib/kv.ts';
+import { verifyAdmin } from '../lib/auth.js';
+import { getSiteContent, commitSiteContent } from '../lib/github.js';
+import { checkMemorySubmitRateLimit } from '../lib/rateLimit.js';
+import { pushPendingMemory, getPendingMemories, removePendingMemory } from '../lib/kv.js';
 
 const router = Router();
 

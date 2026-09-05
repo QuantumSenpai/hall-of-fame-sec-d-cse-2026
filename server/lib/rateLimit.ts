@@ -1,5 +1,5 @@
 import type { IncomingMessage } from 'http';
-import { checkAndIncrementRateLimit } from './kv.ts';
+import { checkAndIncrementRateLimit } from './kv.js';
 
 /**
  * Extracts client IP from incoming request headers

@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { checkLoginRateLimit } from '../lib/rateLimit.ts';
-import { verifyCredentials, generateAdminToken, setAdminCookie, clearAdminCookie, verifyAdmin } from '../lib/auth.ts';
+import { checkLoginRateLimit } from '../lib/rateLimit.js';
+import { verifyCredentials, generateAdminToken, setAdminCookie, clearAdminCookie, verifyAdmin } from '../lib/auth.js';
 
 const router = Router();
 

@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { verifyAdmin } from '../lib/auth.ts';
-import { getSiteContent, commitSiteContent } from '../lib/github.ts';
-import { formatGDriveImageUrl } from '../lib/media.ts';
+import { verifyAdmin } from '../lib/auth.js';
+import { getSiteContent, commitSiteContent } from '../lib/github.js';
+import { formatGDriveImageUrl } from '../lib/media.js';
 
 const router = Router();
 

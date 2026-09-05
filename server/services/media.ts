@@ -1,1 +1,1 @@
-export * from '../lib/media.ts';
+export * from '../lib/media.js';

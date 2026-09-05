@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { getSiteContent } from '../lib/github.ts';
-import { getAllPhotoLikes } from '../lib/kv.ts';
+import { getSiteContent } from '../lib/github.js';
+import { getAllPhotoLikes } from '../lib/kv.js';
 
 const router = Router();
 

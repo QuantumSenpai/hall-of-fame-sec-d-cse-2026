@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { verifyAdmin } from '../lib/auth.ts';
-import { getSiteContent, commitSiteContent } from '../lib/github.ts';
+import { verifyAdmin } from '../lib/auth.js';
+import { getSiteContent, commitSiteContent } from '../lib/github.js';
 
 const router = Router();
 

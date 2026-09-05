@@ -1,17 +1,17 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { validateAuthEnvironment } from './lib/auth.ts';
+import { validateAuthEnvironment } from './lib/auth.js';
 
-import authRouter from './routes/auth.ts';
-import contentRouter from './routes/content.ts';
-import heroRouter from './routes/hero.ts';
-import apologyRouter from './routes/apology.ts';
-import photosRouter from './routes/photos.ts';
-import videosRouter from './routes/videos.ts';
-import teachersRouter from './routes/teachers.ts';
-import memoriesRouter from './routes/memories.ts';
-import peopleRouter from './routes/people.ts';
+import authRouter from './routes/auth.js';
+import contentRouter from './routes/content.js';
+import heroRouter from './routes/hero.js';
+import apologyRouter from './routes/apology.js';
+import photosRouter from './routes/photos.js';
+import videosRouter from './routes/videos.js';
+import teachersRouter from './routes/teachers.js';
+import memoriesRouter from './routes/memories.js';
+import peopleRouter from './routes/people.js';
 
 dotenv.config();
 
@@ -28,6 +28,16 @@ const app = express();
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
+
+// Vercel rewrite compatibility
+app.use((req, _res, next) => {
+  const matched = req.headers['x-matched-path'];
+  if (matched && typeof matched === 'string' && !matched.endsWith('/api/index') && !matched.endsWith('/api')) {
+    const qIndex = req.url.indexOf('?');
+    req.url = matched + (qIndex !== -1 ? req.url.slice(qIndex) : '');
+  }
+  next();
+});
 
 // Router holding all endpoints
 const apiRouter = express.Router();

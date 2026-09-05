@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { verifyAdmin } from '../lib/auth.ts';
-import { getSiteContent, commitSiteContent } from '../lib/github.ts';
-import { formatGDriveImageUrl, validateImageUrl, extractGDriveFileId } from '../lib/media.ts';
-import { getAllPhotoLikes, incrementPhotoLikes } from '../lib/kv.ts';
-import { checkPhotoLikeRateLimit } from '../lib/rateLimit.ts';
+import { verifyAdmin } from '../lib/auth.js';
+import { getSiteContent, commitSiteContent } from '../lib/github.js';
+import { formatGDriveImageUrl, validateImageUrl, extractGDriveFileId } from '../lib/media.js';
+import { getAllPhotoLikes, incrementPhotoLikes } from '../lib/kv.js';
+import { checkPhotoLikeRateLimit } from '../lib/rateLimit.js';
 
 const router = Router();
 
