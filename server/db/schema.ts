@@ -1,8 +1,8 @@
-import { pgTable, text, integer, boolean, timestamp, serial, varchar, jsonb } from 'drizzle-orm/pg-core';
+import { pgTable, text, integer, boolean, varchar, jsonb, bigint, serial } from 'drizzle-orm/pg-core';
 
 // Photos table
 export const photos = pgTable('photos', {
-  id: serial('id').primaryKey(),
+  id: bigint('id', { mode: 'number' }).primaryKey(),
   title: text('title').notNull(),
   caption: text('caption'),
   description: text('description'),
@@ -17,12 +17,12 @@ export const photos = pgTable('photos', {
   isFeatured: boolean('is_featured').default(false).notNull(),
   status: varchar('status', { length: 20 }).default('published').notNull(),
   displayOrder: integer('display_order').default(0).notNull(),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
+  createdAt: bigint('created_at', { mode: 'number' }),
 });
 
 // Videos table
 export const videos = pgTable('videos', {
-  id: serial('id').primaryKey(),
+  id: bigint('id', { mode: 'number' }).primaryKey(),
   title: text('title').notNull(),
   description: text('description'),
   youtubeUrl: text('youtube_url').notNull(),
@@ -32,12 +32,12 @@ export const videos = pgTable('videos', {
   isFeatured: boolean('is_featured').default(false).notNull(),
   status: varchar('status', { length: 20 }).default('published').notNull(),
   displayOrder: integer('display_order').default(0).notNull(),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
+  createdAt: bigint('created_at', { mode: 'number' }),
 });
 
 // Teachers table
 export const teachers = pgTable('teachers', {
-  id: serial('id').primaryKey(),
+  id: bigint('id', { mode: 'number' }).primaryKey(),
   name: text('name').notNull(),
   department: text('department').notNull(),
   photoUrl: text('photo_url'),
@@ -47,24 +47,24 @@ export const teachers = pgTable('teachers', {
   isFeatured: boolean('is_featured').default(false).notNull(),
   status: varchar('status', { length: 20 }).default('published').notNull(),
   displayOrder: integer('display_order').default(0).notNull(),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
+  createdAt: bigint('created_at', { mode: 'number' }),
 });
 
 // People / Contributors table
 export const people = pgTable('people', {
-  id: serial('id').primaryKey(),
+  id: bigint('id', { mode: 'number' }).primaryKey(),
   name: text('name').notNull(),
   role: text('role').notNull(),
   team: varchar('team', { length: 50 }).default('organizer').notNull(),
   photoUrl: text('photo_url'),
   bio: text('bio'),
   displayOrder: integer('display_order').default(0).notNull(),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
+  createdAt: bigint('created_at', { mode: 'number' }),
 });
 
 // Student Memories table (Moderated)
 export const memories = pgTable('memories', {
-  id: serial('id').primaryKey(),
+  id: bigint('id', { mode: 'number' }).primaryKey(),
   authorName: text('author_name').notNull(),
   authorRole: text('author_role').default('Student').notNull(),
   message: text('message').notNull(),
@@ -72,8 +72,8 @@ export const memories = pgTable('memories', {
   category: varchar('category', { length: 50 }).default('gratitude').notNull(),
   status: varchar('status', { length: 20 }).default('pending').notNull(),
   isFeatured: boolean('is_featured').default(false).notNull(),
-  approvedAt: timestamp('approved_at'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
+  approvedAt: bigint('approved_at', { mode: 'number' }),
+  createdAt: bigint('created_at', { mode: 'number' }),
 });
 
 // Hero section single-row table
@@ -88,7 +88,7 @@ export const hero = pgTable('hero', {
   bookCaption: text('book_caption'),
   quoteHeading: text('quote_heading'),
   quoteSubtext: text('quote_subtext'),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  updatedAt: bigint('updated_at', { mode: 'number' }),
 });
 
 // Apology section single-row table
@@ -99,7 +99,7 @@ export const apology = pgTable('apology', {
   paragraphs: jsonb('paragraphs').$type<string[]>().notNull(),
   signature: text('signature').notNull(),
   subSignature: text('sub_signature').notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  updatedAt: bigint('updated_at', { mode: 'number' }),
 });
 
 // Inferred Drizzle types

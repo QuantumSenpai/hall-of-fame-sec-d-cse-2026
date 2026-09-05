@@ -47,7 +47,7 @@ router.put('/:id/status', async (req, res) => {
             category: pendingItem.category || 'gratitude',
             status: 'approved',
             isFeatured: false,
-            approvedAt: new Date(),
+            approvedAt: Date.now(),
           })
           .returning();
 
@@ -65,7 +65,7 @@ router.put('/:id/status', async (req, res) => {
 
         const [updated] = await db
           .update(schema.memories)
-          .set({ status: 'approved', approvedAt: new Date() })
+          .set({ status: 'approved', approvedAt: Date.now() })
           .where(eq(schema.memories.id, memoryId))
           .returning();
 

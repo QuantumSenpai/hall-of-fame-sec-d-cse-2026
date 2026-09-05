@@ -15,10 +15,10 @@ async function migrate() {
   console.log('🚀 Connecting to Neon PostgreSQL...');
   const sql = neon(connectionString);
 
-  console.log('📦 Creating database tables if not exist...');
+  console.log('📦 Verifying database tables...');
   await sql`
     CREATE TABLE IF NOT EXISTS photos (
-      id SERIAL PRIMARY KEY,
+      id BIGINT PRIMARY KEY,
       title TEXT NOT NULL,
       caption TEXT,
       description TEXT,
@@ -33,13 +33,13 @@ async function migrate() {
       is_featured BOOLEAN DEFAULT FALSE NOT NULL,
       status VARCHAR(20) DEFAULT 'published' NOT NULL,
       display_order INTEGER DEFAULT 0 NOT NULL,
-      created_at TIMESTAMP DEFAULT NOW() NOT NULL
+      created_at BIGINT
     );
   `;
 
   await sql`
     CREATE TABLE IF NOT EXISTS videos (
-      id SERIAL PRIMARY KEY,
+      id BIGINT PRIMARY KEY,
       title TEXT NOT NULL,
       description TEXT,
       youtube_url TEXT NOT NULL,
@@ -49,13 +49,13 @@ async function migrate() {
       is_featured BOOLEAN DEFAULT FALSE NOT NULL,
       status VARCHAR(20) DEFAULT 'published' NOT NULL,
       display_order INTEGER DEFAULT 0 NOT NULL,
-      created_at TIMESTAMP DEFAULT NOW() NOT NULL
+      created_at BIGINT
     );
   `;
 
   await sql`
     CREATE TABLE IF NOT EXISTS teachers (
-      id SERIAL PRIMARY KEY,
+      id BIGINT PRIMARY KEY,
       name TEXT NOT NULL,
       department TEXT NOT NULL,
       photo_url TEXT,
@@ -65,26 +65,26 @@ async function migrate() {
       is_featured BOOLEAN DEFAULT FALSE NOT NULL,
       status VARCHAR(20) DEFAULT 'published' NOT NULL,
       display_order INTEGER DEFAULT 0 NOT NULL,
-      created_at TIMESTAMP DEFAULT NOW() NOT NULL
+      created_at BIGINT
     );
   `;
 
   await sql`
     CREATE TABLE IF NOT EXISTS people (
-      id SERIAL PRIMARY KEY,
+      id BIGINT PRIMARY KEY,
       name TEXT NOT NULL,
       role TEXT NOT NULL,
       team VARCHAR(50) DEFAULT 'organizer' NOT NULL,
       photo_url TEXT,
       bio TEXT,
       display_order INTEGER DEFAULT 0 NOT NULL,
-      created_at TIMESTAMP DEFAULT NOW() NOT NULL
+      created_at BIGINT
     );
   `;
 
   await sql`
     CREATE TABLE IF NOT EXISTS memories (
-      id SERIAL PRIMARY KEY,
+      id BIGINT PRIMARY KEY,
       author_name TEXT NOT NULL,
       author_role TEXT DEFAULT 'Student' NOT NULL,
       message TEXT NOT NULL,
@@ -92,8 +92,8 @@ async function migrate() {
       category VARCHAR(50) DEFAULT 'gratitude' NOT NULL,
       status VARCHAR(20) DEFAULT 'pending' NOT NULL,
       is_featured BOOLEAN DEFAULT FALSE NOT NULL,
-      approved_at TIMESTAMP,
-      created_at TIMESTAMP DEFAULT NOW() NOT NULL
+      approved_at BIGINT,
+      created_at BIGINT
     );
   `;
 
@@ -109,7 +109,7 @@ async function migrate() {
       book_caption TEXT,
       quote_heading TEXT,
       quote_subtext TEXT,
-      updated_at TIMESTAMP DEFAULT NOW() NOT NULL
+      updated_at BIGINT
     );
   `;
 
@@ -121,7 +121,7 @@ async function migrate() {
       paragraphs JSONB NOT NULL,
       signature TEXT NOT NULL,
       sub_signature TEXT NOT NULL,
-      updated_at TIMESTAMP DEFAULT NOW() NOT NULL
+      updated_at BIGINT
     );
   `;
 
@@ -142,8 +142,9 @@ async function migrate() {
   if (heroCount[0].count === 0 && content.hero) {
     console.log('🌱 Seeding Hero content...');
     await sql`
-      INSERT INTO hero (badge_text, title_line_1, title_line_2, title_line_3, subtitle, book_image, book_caption, quote_heading, quote_subtext)
+      INSERT INTO hero (id, badge_text, title_line_1, title_line_2, title_line_3, subtitle, book_image, book_caption, quote_heading, quote_subtext, updated_at)
       VALUES (
+        1,
         ${content.hero.badgeText || ''},
         ${content.hero.titleLine1 || ''},
         ${content.hero.titleLine2 || ''},
@@ -152,8 +153,10 @@ async function migrate() {
         ${content.hero.bookImage || null},
         ${content.hero.bookCaption || null},
         ${content.hero.quoteHeading || null},
-        ${content.hero.quoteSubtext || null}
-      );
+        ${content.hero.quoteSubtext || null},
+        ${Date.now()}
+      )
+      ON CONFLICT (id) DO NOTHING;
     `;
   }
 
@@ -162,24 +165,27 @@ async function migrate() {
   if (apologyCount[0].count === 0 && content.apology) {
     console.log('🌱 Seeding Apology content...');
     await sql`
-      INSERT INTO apology (label, title, paragraphs, signature, sub_signature)
+      INSERT INTO apology (id, label, title, paragraphs, signature, sub_signature, updated_at)
       VALUES (
+        1,
         ${content.apology.label || ''},
         ${content.apology.title || ''},
         ${JSON.stringify(content.apology.paragraphs || [])},
         ${content.apology.signature || ''},
-        ${content.apology.subSignature || ''}
-      );
+        ${content.apology.subSignature || ''},
+        ${Date.now()}
+      )
+      ON CONFLICT (id) DO NOTHING;
     `;
   }
 
   // 3. Photos
-  const photosCount = await sql`SELECT count(*)::int as count FROM photos`;
-  if (photosCount[0].count === 0 && Array.isArray(content.photos)) {
+  if (Array.isArray(content.photos)) {
     console.log(`🌱 Seeding ${content.photos.length} photos...`);
     for (const p of content.photos) {
+      const createdAtMs = p.createdAt ? new Date(p.createdAt).getTime() : Date.now();
       await sql`
-        INSERT INTO photos (id, title, caption, description, image_url, drive_file_id, layout_style, category, date, location, uploaded_by, likes, is_featured, status, display_order)
+        INSERT INTO photos (id, title, caption, description, image_url, drive_file_id, layout_style, category, date, location, uploaded_by, likes, is_featured, status, display_order, created_at)
         VALUES (
           ${p.id},
           ${p.title || ''},
@@ -195,21 +201,21 @@ async function migrate() {
           ${p.likes || 0},
           ${Boolean(p.isFeatured)},
           ${p.status || 'published'},
-          ${p.displayOrder || 0}
+          ${p.displayOrder || 0},
+          ${createdAtMs}
         )
         ON CONFLICT (id) DO NOTHING;
       `;
     }
-    await sql`SELECT setval('photos_id_seq', (SELECT COALESCE(MAX(id), 1) FROM photos));`;
   }
 
   // 4. Videos
-  const videosCount = await sql`SELECT count(*)::int as count FROM videos`;
-  if (videosCount[0].count === 0 && Array.isArray(content.videos)) {
+  if (Array.isArray(content.videos)) {
     console.log(`🌱 Seeding ${content.videos.length} videos...`);
     for (const v of content.videos) {
+      const createdAtMs = v.createdAt ? new Date(v.createdAt).getTime() : Date.now();
       await sql`
-        INSERT INTO videos (id, title, description, youtube_url, youtube_id, thumbnail_url, is_short, is_featured, status, display_order)
+        INSERT INTO videos (id, title, description, youtube_url, youtube_id, thumbnail_url, is_short, is_featured, status, display_order, created_at)
         VALUES (
           ${v.id},
           ${v.title || ''},
@@ -220,21 +226,21 @@ async function migrate() {
           ${Boolean(v.isShort)},
           ${Boolean(v.isFeatured)},
           ${v.status || 'published'},
-          ${v.displayOrder || 0}
+          ${v.displayOrder || 0},
+          ${createdAtMs}
         )
         ON CONFLICT (id) DO NOTHING;
       `;
     }
-    await sql`SELECT setval('videos_id_seq', (SELECT COALESCE(MAX(id), 1) FROM videos));`;
   }
 
   // 5. Teachers
-  const teachersCount = await sql`SELECT count(*)::int as count FROM teachers`;
-  if (teachersCount[0].count === 0 && Array.isArray(content.teachers)) {
+  if (Array.isArray(content.teachers)) {
     console.log(`🌱 Seeding ${content.teachers.length} teachers...`);
     for (const t of content.teachers) {
+      const createdAtMs = t.createdAt ? new Date(t.createdAt).getTime() : Date.now();
       await sql`
-        INSERT INTO teachers (id, name, department, photo_url, message, profile_link, video_url, is_featured, status, display_order)
+        INSERT INTO teachers (id, name, department, photo_url, message, profile_link, video_url, is_featured, status, display_order, created_at)
         VALUES (
           ${t.id},
           ${t.name || ''},
@@ -245,21 +251,21 @@ async function migrate() {
           ${t.videoUrl || null},
           ${Boolean(t.isFeatured)},
           ${t.status || 'published'},
-          ${t.displayOrder || 0}
+          ${t.displayOrder || 0},
+          ${createdAtMs}
         )
         ON CONFLICT (id) DO NOTHING;
       `;
     }
-    await sql`SELECT setval('teachers_id_seq', (SELECT COALESCE(MAX(id), 1) FROM teachers));`;
   }
 
   // 6. People
-  const peopleCount = await sql`SELECT count(*)::int as count FROM people`;
-  if (peopleCount[0].count === 0 && Array.isArray(content.people)) {
+  if (Array.isArray(content.people)) {
     console.log(`🌱 Seeding ${content.people.length} people...`);
     for (const p of content.people) {
+      const createdAtMs = p.createdAt ? new Date(p.createdAt).getTime() : Date.now();
       await sql`
-        INSERT INTO people (id, name, role, team, photo_url, bio, display_order)
+        INSERT INTO people (id, name, role, team, photo_url, bio, display_order, created_at)
         VALUES (
           ${p.id},
           ${p.name || ''},
@@ -267,21 +273,22 @@ async function migrate() {
           ${p.team || 'organizer'},
           ${p.photoUrl || null},
           ${p.bio || null},
-          ${p.displayOrder || 0}
+          ${p.displayOrder || 0},
+          ${createdAtMs}
         )
         ON CONFLICT (id) DO NOTHING;
       `;
     }
-    await sql`SELECT setval('people_id_seq', (SELECT COALESCE(MAX(id), 1) FROM people));`;
   }
 
   // 7. Memories
-  const memoriesCount = await sql`SELECT count(*)::int as count FROM memories`;
-  if (memoriesCount[0].count === 0 && Array.isArray(content.memories)) {
+  if (Array.isArray(content.memories)) {
     console.log(`🌱 Seeding ${content.memories.length} memories...`);
     for (const m of content.memories) {
+      const createdAtMs = m.createdAt ? new Date(m.createdAt).getTime() : Date.now();
+      const approvedAtMs = m.approvedAt ? new Date(m.approvedAt).getTime() : Date.now();
       await sql`
-        INSERT INTO memories (id, author_name, author_role, message, image_url, category, status, is_featured, approved_at)
+        INSERT INTO memories (id, author_name, author_role, message, image_url, category, status, is_featured, approved_at, created_at)
         VALUES (
           ${m.id},
           ${m.authorName || ''},
@@ -291,12 +298,12 @@ async function migrate() {
           ${m.category || 'gratitude'},
           ${m.status || 'approved'},
           ${Boolean(m.isFeatured)},
-          NOW()
+          ${approvedAtMs},
+          ${createdAtMs}
         )
         ON CONFLICT (id) DO NOTHING;
       `;
     }
-    await sql`SELECT setval('memories_id_seq', (SELECT COALESCE(MAX(id), 1) FROM memories));`;
   }
 
   console.log('✨ All content successfully migrated and seeded into PostgreSQL!');
